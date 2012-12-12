@@ -33,6 +33,10 @@ a:hover
 	display:inline;
 	margin-left:10px;
 }
+#addNewInstructor {
+	display:inline;
+	margin-left:10px;
+}
 
 #addNewClassTitle {
 	display:inline;
@@ -52,6 +56,9 @@ a:hover
 	$("#classtitleid_input_box").append('<div id="addNewClassTitle"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>classtitles/index/add?popup=1\')">New Class Title</a></div>'); 
 
 $("#studentid_input_box").append('<div id="addNewStudent"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>student/index/add?popup=1\')">New Student</a></div>'); 
+
+$("#instructor_input_box").append('<div id="addNewInstructor"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>instructors/index/add?popup=1\')">New Instructor</a></div>'); 
+
 
 
 

@@ -18,93 +18,95 @@ class Reports extends Application {
    	    $this->load->view('reports_view');
 		$this->load->view('footer');
 	}
+	
+	function upcomingClasses() {
+	
+		$this->load->view('header');
 
-	function generateUserReport()
-	{
-		
-		if(logged_in())
-		{
-		error_reporting(0);  //suppress some error message
-		$parameters=array(
-			'paper'=>'letter',   //paper size
-			'orientation'=>'landscape',  //portrait or lanscape
-			'type'=>'color',   //paper type: none|color|colour|image
-			'options'=>array(1.0, 1.0, 1.0) //I specified the paper as color paper, so, here's the paper color (RGB)
-		);
-		$this->load->library('pdf', $parameters);  //load ezPdf library with above parameters
-		$this->pdf->selectFont(APPPATH.'/third_party/pdf-php/fonts/Helvetica.afm');  //choose font, watch out for the dont location!
-		$this->pdf->ezText('Campus Linc - User Report',20);  //insert text with size
- 
-		//get data from database (note: this should be on 'models' but mehhh..), we'll try creating table using ezPdf
-		$q=$this->db->query('SELECT id, username, email, group_id FROM users');
-                //this data will be presented as table in PDF
-		$data_table=array();
-		foreach ($q->result_array() as $row) {
-			$data_table[]=$row;
-		}
-                //this one is for table header
-		$column_header=array(
-			'id'=>'User ID',
-			'username'=>'User Name',
-			'email'=>'Email Address',
-			'group_id'=>'Group'
-		);
-		$this->pdf->ezTable($data_table, $column_header); //generate table
-		$this->pdf->ezSetY(480);  //set vertical position
-		$this->pdf->ezStream(array('Content-Disposition'=>'UserReport.pdf'));
-		}
-		else
-		{
-			$this->login();
-		}
+   	    $this->load->view('upcoming_classes');
+		$this->load->view('footer');
+
+	
 	}
 
-	function generateStudentReport()
-	{
+	function generateUpcomingClassesReport() {
+	
+	
+		$this->load->library('table');
+		$this->load->helper('file');
 		
-		if(logged_in())
-		{
-		error_reporting(0);  //suppress some error message
-		$parameters=array(
-			'paper'=>'letter',   //paper size
-			'orientation'=>'landscape',  //portrait or lanscape
-			'type'=>'color',   //paper type: none|color|colour|image
-			'options'=>array(1.0, 1.0, 1.0) //I specified the paper as color paper, so, here's the paper color (RGB)
-		);
-		$this->load->library('pdf', $parameters);  //load ezPdf library with above parameters
-		$this->pdf->selectFont(APPPATH.'/third_party/pdf-php/fonts/Helvetica.afm');  //choose font, watch out for the dont location!
-		$this->pdf->ezText('Campus Linc - Student Report',20);  //insert text with size
- 
-		//get data from database (note: this should be on 'models' but mehhh..), we'll try creating table using ezPdf
-		$q=$this->db->query('SELECT id, classname, tuition, courseware, length FROM class_titles');
-                //this data will be presented as table in PDF
-		$data_table=array();
-		foreach ($q->result_array() as $row) {
-			$data_table[]=$row;
-		}
-                //this one is for table header
-		$column_header=array(
-			'id'=>'Class ID',
-			'classname'=>'Class Name',
-			'tuition'=>'Tuition',
-			'courseware'=>'Courseware',
-			'length'=>'Class Length'
-		);
-		$options = array(
-			'font-size'=>'8',
-			'width'=>'700',
-			'max-width'=>'700'
-		);
-		$this->pdf->ezTable($data_table, $column_header,'Student Report',$options); //generate table
-		$this->pdf->ezSetY(0);  //set vertical position
-		$this->pdf->ezStream(array('Content-Disposition'=>'just_random_filename.pdf'));
-		}
-		else
-		{
-			$this->login();
-		}
-	}
+		$today = date("Y-m-d");
+//		$output = '<table>';
+		
+		$from = $_POST['datepickerFrom'];
+		$to = $_POST['datepickerTo'];
+		
+		$this->load->library('Pdf');
+		$this->load->database();
+		
+$sql = 'SELECT class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\'';
+			
+		$query = $this->db->query($sql);
+		
+		$numRows = $query->num_rows();
+		
+		$this->table->set_heading('Class Name', 'Start Date', 'Location', 'Instructor', 'Notes');
 
+		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numRows. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+
+		$this->table->set_template($tmpl);
+
+		
+		if ($numRows > 0)
+			{
+				$array = array();
+				$i = 0;
+				$i2 = 0;
+	   			foreach ($query->result() as $row)
+	  			{
+	  				//var_dump($row);
+	  				$array[$i]= $row;
+	      			
+	      			
+	   			while($i < $numRows)
+	   			{
+	   				
+	   				$sql2 = 'SELECT * FROM `enrollment` WHERE `classid` = \'' .$row->classtitleid. '\' AND `status` = \'1\'';	
+	   				echo $sql2;
+	      			$query2 = $this->db->query($sql2);
+	      			$array[$i]['numRows'] = $query2->num_rows();
+	      			$i++;
+	      				
+	      		}
+	   		}
+	   	}
+	   	
+	   //	$table =  $this->table->generate();
+	   
+	   foreach($array as $arr)
+	   {
+	   $this->table->add_row(array($arr->classname, $arr->startdate,  $arr->location, $arr->instructor, $arr->notes));
+	   
+	   }
+	   			$filename = '/tmp/' .'upComingClassesReport-' .rand(1,1000). '.html';
+	   			if ( ! write_file('.' .$filename, $table))
+				{
+     				echo 'Unable to write the file';
+				} else {
+     				//echo json_encode($table);
+     				echo json_encode('<h2 style="color:red;"><a href="' .$filename. '" target="_blank">Click Here to Download Upcoming Classes Sheet</a></h2>');
+				}
+
+//echo json_encode($array);
+exit;
+			
+		}
+		
+		
+	
+	
+	
+	
 
 	
 
