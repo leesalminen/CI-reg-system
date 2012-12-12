@@ -28,6 +28,9 @@ class Reports extends Application {
 
 	
 	}
+	
+	
+
 
 	function generateUpcomingClassesReport() {
 	
@@ -44,51 +47,55 @@ class Reports extends Application {
 		$this->load->library('Pdf');
 		$this->load->database();
 		
-$sql = 'SELECT class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\'';
+$sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\' AND `cancelled` = \'NO\'';
+
 			
 		$query = $this->db->query($sql);
+		$array = array();
+		$array2 = array();
+		foreach($query->result() as $row){
+			$array[] = $row;
 		
-		$numRows = $query->num_rows();
 		
-		$this->table->set_heading('Class Name', 'Start Date', 'Location', 'Instructor', 'Notes');
+		}	
+		
+		foreach($array as $classtitleid){
+			$sql2 = 'SELECT id,classid,datesid FROM `enrollment` WHERE `classid` = \'' .$classtitleid->classtitleid. '\' AND `status` = \'1\'';
+			$query2 = $this->db->query($sql2);
+			
+			
+			foreach($query2->result() as $row){
+				//$array2[]=$row;
+				$numRows = $query2->num_rows();
+				$array2[$row->classid] = $numRows;
+				
+			}
+						
+			
+		
+		}
+				
+		//print_r($array);
+		//print_r($array2);
+		
+		$numberOfClasses = $query->num_rows();
+		$today = date('Y-m-d');
+		$this->table->set_heading('Class Name', 'Start Date', 'Location', 'Instructor', 'Notes', '# of Students');
 
-		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numRows. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><h1>Upcoming Classes Report</h1><h3>This report was generated on: ' .$today. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
-
-		
-		if ($numRows > 0)
-			{
-				$array = array();
-				$i = 0;
-				$i2 = 0;
-	   			foreach ($query->result() as $row)
-	  			{
-	  				//var_dump($row);
-	  				$array[$i]= $row;
-	      			
-	      			
-	   			while($i < $numRows)
-	   			{
-	   				
-	   				$sql2 = 'SELECT * FROM `enrollment` WHERE `classid` = \'' .$row->classtitleid. '\' AND `status` = \'1\'';	
-	   				echo $sql2;
-	      			$query2 = $this->db->query($sql2);
-	      			$array[$i]['numRows'] = $query2->num_rows();
-	      			$i++;
-	      				
-	      		}
-	   		}
-	   	}
-	   	
-	   //	$table =  $this->table->generate();
-	   
+		   
 	   foreach($array as $arr)
 	   {
-	   $this->table->add_row(array($arr->classname, $arr->startdate,  $arr->location, $arr->instructor, $arr->notes));
+	   $classID = $arr->classtitleid;
+	   $value = $array2[$classID];
+	   $this->table->add_row(array($arr->classname, $arr->startdate,  $arr->location, $arr->instructor, $arr->notes, $value));
 	   
 	   }
-	   			$filename = '/tmp/' .'upComingClassesReport-' .rand(1,1000). '.html';
+	   			$table =  $this->table->generate();
+				
+	   			$filename = '/tmp/' .$today. '-upComingClassesReport-' .rand(1,1000). '.html';
 	   			if ( ! write_file('.' .$filename, $table))
 				{
      				echo 'Unable to write the file';
