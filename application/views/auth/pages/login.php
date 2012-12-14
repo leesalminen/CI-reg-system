@@ -1,6 +1,6 @@
 <div id="login">
 	
-	<h2>Login</h2>
+	<h2>Login to Campus Linc WebApp</h2>
 	<div class="box">
 			<?php echo form_open(); ?>
 			Username/Email:<br />
@@ -10,4 +10,6 @@
 			<input type="submit" value="Login" name="login" />
 			</form>
 	</div>
+	
+	<h4>Forgot your username and/or password? <a href="mailto:lee@zoodlemarketing.com">Click to Email Lee.</a></h4>
 </div>

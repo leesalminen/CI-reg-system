@@ -2,6 +2,7 @@
 
 $(document).ready(function(){
 setInterval('updateClock()', 1000);
+setInterval('checkForNewEnrollments()',100000);
 
 	$("#datepicker").change(function(){
 	var form = $(this);
@@ -277,13 +278,37 @@ setInterval('updateClock()', 1000);
         
  }
  
+ function checkForNewEnrollments() {
+ 	var data = $("#numRows").val();
+ 	$.ajax({
+				type:'POST',
+				url: '/checkin/checkForNewEnrollments',
+				data: 'numRows='+data,
+				dataType: "json",
+				success: function(msg) {
+					//$("#testingResponse").html('').html(msg);
+					if(msg == '1') {
+						$.pnotify({
+    title: 'New Enrollments Found!',
+    text: 'New enrollments found for today, refresh page.<br /><a href="/checkin" style="text-align:center;">Refresh Page</button>',
+    type: 'error',
+    hide: false
+});
+					
+					}				
+				}
+			});
+ 
+ }
+ 
 		
 </script>
 	<div id="banner-bar">
-		<h2>Check In … Shows Todays Classes Only (Change to today before launch)</h2>
+		<h2>Check In … Shows Todays Classes Only</h2>
 	</div>
     
-  <!--  <h2>Generate Check In Forms</h2>
+ <!--   <p id="testingResponse"><a href="#" onclick="checkForNewEnrollments();">Click</a></p>
+   <h2>Generate Check In Forms</h2>
     
    
     <form method="post" action="/checkin/generateCheckinSheet" id="generateCheckin" name="generateCheckin">
@@ -308,6 +333,7 @@ $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 <hr />
 -->
     <div>
+    	<input id="numRows" type="hidden" value="<?=$numRows;?>" />
        <h2 style="margin-bottom:0;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></h2>
        <h4 style="margin-top:5px;">Logged In As: <?=$username;?>. Not <?=$username;?>? <a href="/logout">Logout</a></h4>
        <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
