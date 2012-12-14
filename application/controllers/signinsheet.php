@@ -1,6 +1,6 @@
 <?php
 
-class Checkin extends CI_Controller {
+class Signinsheet extends CI_Controller {
 
 	
 	function __construct()
@@ -12,85 +12,13 @@ class Checkin extends CI_Controller {
 	
 	function index()
 	{
-		$today = date('Y-m-d');
-		$this->load->database();
-		$this->load->helper('html');
-		$this->load->library('table');
-		
-		//CHANGE SQL FOR LIVE DATE
-		
-		$sql = 'SELECT billing.billingcontact,student.firstname,student.lastname,class_titles.classname, enrollment.id AS enrollmentid, enrollment.checkedIn, enrollment.userCancel,enrollment.noshow,class_schedule.startdate,company.companyname AS companyname,enrollment.companyid FROM enrollment
-LEFT JOIN billing as billing ON billing.id = enrollment.billingid
-LEFT JOIN student as student ON student.id = enrollment.studentid
-LEFT JOIN class_titles as class_titles ON class_titles.id = enrollment.classid
-LEFT JOIN class_schedule as class_schedule ON class_schedule.id = enrollment.datesid
-LEFT JOIN company as company ON company.id = enrollment.companyid
-WHERE class_schedule.cancelled = "No"
-AND startdate = "' .$today. '"';
-
-	$sql = 'SELECT billing.billingcontact,student.firstname,student.lastname,class_titles.classname, enrollment.id AS enrollmentid, enrollment.checkedIn, enrollment.userCancel,enrollment.noshow,class_schedule.startdate,company.companyname AS companyname,enrollment.companyid FROM enrollment
-LEFT JOIN billing as billing ON billing.id = enrollment.billingid
-LEFT JOIN student as student ON student.id = enrollment.studentid
-LEFT JOIN class_titles as class_titles ON class_titles.id = enrollment.classid
-LEFT JOIN class_schedule as class_schedule ON class_schedule.id = enrollment.datesid
-LEFT JOIN company as company ON company.id = enrollment.companyid
-WHERE class_schedule.cancelled = "No"
-ORDER BY student.lastname
-';
-
-	//WHERE class_schedule.cancelled = "No" AND enrollment.userCancel = "0"
-		$query = $this->db->query($sql);
-		
-				
-		$this->table->set_heading('Full Name', 'Class Name', 'Company Name', 'Account Executive', 'Checked In?', 'Cancelled?', 'No Show?');
-
-		$tmpl = array ( 'table_open'  => '<style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}p.liveButton{width:100%;height:100%;line-height:100%;padding:0;margin:0;}.green{background-color:#CFC;}.liveButton{text-align:center;margin:0;padding:0;}#checkIn{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#checkIn th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#checkIn td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:5px 4px;}#checkIn tbody tr:hover{background-color:#eee;}#checkIn tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style><div style="width:100%;height:100%;"><table id="checkIn">', 'table_close' => '</table></div>' );
-
-		$this->table->set_template($tmpl);
-
-		
-		if ($query->num_rows() > 0)
-			{
-				$numRows = $query->num_rows();
-	   			foreach ($query->result() as $row)
-	  			{
-	  				$fullname = $row->lastname. ', ' .$row->firstname;
-				//var_dump($row);
-	  				if($row->checkedIn == '1') {
-	      			
-	      			$this->table->add_row(array($fullname, $row->classname, $row->companyname,  $row->billingcontact, '<p class="liveButton green" id="checkInP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="checkInChange(' .$row->enrollmentid. ');return false;" id="checkIn' .$row->enrollmentid. '">Check In</a></p>', '<p class="liveButton" id="cancelP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="cancelChange(' .$row->enrollmentid. ');return false;" id="cancel' .$row->enrollmentid. '">Cancel</a></p>', '<p class="liveButton" id="noShowP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="noShowChange(' .$row->enrollmentid. ');return false;" id="noShow' .$row->enrollmentid. '">No Show</a></p>'));
-	      			} else if ($row->userCancel == '1') {
-	      				
-	      			$this->table->add_row(array($fullname, $row->classname, $row->companyname,  $row->billingcontact, '<p class="liveButton" id="checkInP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="checkInChange(' .$row->enrollmentid. ');return false;" id="checkIn' .$row->enrollmentid. '">Check In</a></p>', '<p class="liveButton green" id="cancelP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="cancelChange(' .$row->enrollmentid. ');return false;" id="cancel' .$row->enrollmentid. '">Cancel</a></p>', '<p class="liveButton" id="noShowP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="noShowChange(' .$row->enrollmentid. ');return false;" id="noShow' .$row->enrollmentid. '">No Show</a></p>'));
-
-	      				
-	      			} else if ($row->noshow == '1') {
-	      			
-	      			$this->table->add_row(array($fullname, $row->classname, $row->companyname,  $row->billingcontact, '<p class="liveButton" id="checkInP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="checkInChange(' .$row->enrollmentid. ');return false;" id="checkIn' .$row->enrollmentid. '">Check In</a></p>', '<p class="liveButton" id="cancelP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="cancelChange(' .$row->enrollmentid. ');return false;" id="cancel' .$row->enrollmentid. '">Cancel</a></p>', '<p class="liveButton green" id="noShowP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="noShowChange(' .$row->enrollmentid. ');return false;" id="noShow' .$row->enrollmentid. '">No Show</a></p>'));
-
-	      			} else {
-	      			
-	      			$this->table->add_row(array($fullname, $row->classname, $row->companyname,  $row->billingcontact, '<p class="liveButton" id="checkInP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="checkInChange(' .$row->enrollmentid. ');return false;" id="checkIn' .$row->enrollmentid. '">Check In</a></p>', '<p class="liveButton" id="cancelP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="cancelChange(' .$row->enrollmentid. ');return false;" id="cancel' .$row->enrollmentid. '">Cancel</a></p>', '<p class="liveButton" id="noShowP' .$row->enrollmentid. '"><a href="#" class="liveButton" onclick="noShowChange(' .$row->enrollmentid. ');return false;" id="noShow' .$row->enrollmentid. '">No Show</a></p>'));
-
-	      			
-	      			}
-	
-	      			
-	   			}
-	   			
-	   
-			} 	
-
-		$table =  $this->table->generate();
-	   			
-	   	$output['table'] = $table;
-		
+			
 		
 		$output['js_files'] = array('//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js');
 		$output['css_files'] = array('/assets/jquery-ui-1.9.2.custom.min.css');
  
  		$this->load->view('header',$output);
- 		$this->load->view('checkin_view',$output);
+ 		$this->load->view('signinsheet');
  		$this->load->view('footer'); 	
  		
  		
@@ -106,7 +34,7 @@ ORDER BY student.lastname
 	if($_POST['datepicker']) { $date = $_POST['datepicker']; } else { die; }
 		
 	$query = $this->db->query('SELECT * FROM enrollment LEFT JOIN class_titles as jd45e51a1 ON jd45e51a1.id = enrollment.classid LEFT JOIN class_schedule as jdd77bf35 ON jdd77bf35.id = enrollment.datesid
- WHERE startdate = "' .$date. '" AND cancelled = "No"');
+ WHERE startdate = "' .$date. '" AND status = "1"');
  	
 	$output = '';
 

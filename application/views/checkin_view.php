@@ -1,5 +1,9 @@
 <script>
 $(document).ready(function(){
+
+//$(".green").parent().css('background-color','#CCFFCC');
+//if($(".green")) { .find(".green").parent().css('background-color','#CCFFCC'); }
+
 	$("#datepicker").change(function(){
 	var form = $(this);
 	var post_url = '/checkin/getClassesForDate';
@@ -49,13 +53,93 @@ $(document).ready(function(){
 			});
 		return false;
 		});
-	});					
+	});		
+	
+	
+	function checkInChange(data) {
+	if($("#cancelP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#noShowP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	
+		$.ajax({
+				type:'POST',
+				url: '/checkin/checkInChange',
+				data: 'id='+data,
+				dataType: "json",
+				success: function(msg) {
+						//alert(msg);
+						if(msg == '1') {
+							if($("#checkIn"+data).parent().hasClass('green') == false) {
+								$("#checkIn"+data).parent().addClass('green');
+							} else {
+								$("#checkIn"+data).parent().removeClass('green');
+							}
+							
+						} else { 
+							alert('Error. Try Again.');
+						}
+				}
+		});
+	}
+	
+	
+	function cancelChange(data) {
+	if($("#checkInP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#noShowP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+		$.ajax({
+				type:'POST',
+				url: '/checkin/cancelChange',
+				data: 'id='+data,
+				dataType: "json",
+				success: function(msg) {
+						//alert(msg);
+						if(msg == '1') {
+							if($("#cancel"+data).parent().hasClass('green') == false) {
+								$("#cancel"+data).parent().addClass('green');
+							} else {
+								$("#cancel"+data).parent().removeClass('green');
+							}						} else { 
+							alert('Error. Try Again.');
+						}
+				}
+		});
+	
+	
+	}
+			
+	
+	function noShowChange(data) {
+	if($("#checkInP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#cancelP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+
+		$.ajax({
+				type:'POST',
+				url: '/checkin/noShowChange',
+				data: 'id='+data,
+				dataType: "json",
+				success: function(msg) {
+						//alert(msg);
+						if(msg == '1') {
+							if($("#noShow"+data).parent().hasClass('green') == false) {
+								$("#noShow"+data).parent().addClass('green');
+							} else {
+								$("#noShow"+data).parent().removeClass('green');
+							}
+						} else { 
+							alert('Error. Try Again.');
+						}
+				}
+		});
+	
+	
+	
+	}			
 </script>
 	<div id="banner-bar">
-		<h2>Check In … Only shows courses with students enrolled that are running today</h2>
+		<h2>Check In … Shows Todays Classes Only (Change to today before launch)</h2>
 	</div>
     
-    <h2>Generate Check In Forms</h2>
+  <!--  <h2>Generate Check In Forms</h2>
+    
    
     <form method="post" action="/checkin/generateCheckinSheet" id="generateCheckin" name="generateCheckin">
     	<label for="datepicker">Date</label> 
@@ -75,8 +159,15 @@ $(document).ready(function(){
     <script>
 $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
+
+<hr />
+-->
     <div>
-        <?php echo $output; ?>
+       <h2>Live Check In</h2>
+       <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
+       
+       
+        <?php echo $table; ?>
  
     </div>
   

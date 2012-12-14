@@ -14,7 +14,9 @@ class Enrollment extends CI_Controller {
 	{
 		 $crud = new grocery_CRUD();
  
-  
+  	$crud->unset_add_fields('status');
+	$crud->unset_columns('status');
+
     $crud->set_table('enrollment');
     $crud->set_theme('datatables');
     $crud->set_subject('Enrollment');
@@ -25,16 +27,18 @@ class Enrollment extends CI_Controller {
     $crud->set_relation('classid','class_titles', 'classname');
     $crud->set_relation('datesid','class_schedule', 'startdate');
     
-	$crud->unset_add_fields('checkedIn');
-	$crud->unset_columns('checkedIn');
 	
-	 $crud->display_as('companyid','Company');
+	$crud->display_as('companyid','Company');
 	$crud->display_as('studentid','Student Name');
  	$crud->display_as('classid','Class Name');
  	$crud->display_as('datesid','Class Date');
- 	$crud->display_as('status','Class Active?');
+ 	$crud->display_as('status','Enrollment Active?');
  	$crud->display_as('billingid','Billing Contact');
  	$crud->display_as('po','Purchase Order #');
+ 	$crud->display_as('checkedIn','Checked In?');
+ 	 $crud->display_as('userCancel','Student Cancel?');
+ 	$crud->display_as('noshow','No Show?');
+
 
 
    

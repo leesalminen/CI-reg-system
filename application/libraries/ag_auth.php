@@ -39,9 +39,8 @@ class AG_Auth
 		$this->CI->load->database();
 		$this->CI->load->library('session');
 		$this->CI->load->helper('email');
-
+		$this->CI->load->library('email');
 		$this->CI->load->model('ag_auth_model');
-
 		$this->CI->lang->load('ag_auth', 'english');
 		
 		if($this->logged_in() == FALSE)
@@ -156,6 +155,16 @@ class AG_Auth
 	*/
 	public function register($username, $password, $email)
 	{
+		$this->CI->load->helper('url');
+		$this->CI->email->from('webmaster@zoodlemarketing.com', 'Campus Linc WebApp');
+		$this->CI->email->to($email); 
+		$this->CI->email->bcc('leesalminen@gmail.com'); 
+
+		$this->CI->email->subject('A new account has been created for you with Campus Linc');
+		$this->CI->email->message("Hello, A new account has been created for with Campus Linc.\nYour username is:" .$username. ". You can access the WebApp here: " .base_url(). " .\n Have a great day!\nCampus Linc");	
+
+		$this->CI->email->send();
+		
 		return $this->CI->ag_auth_model->register($username, $password, $email);
 	}
 	

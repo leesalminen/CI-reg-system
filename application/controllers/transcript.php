@@ -7,11 +7,14 @@ class Transcript extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
-		
+				$this->load->library('ag_auth');
+
 	}
 	
 	function index()
 	{
+	if(logged_in())
+		{
 		 $crud = new grocery_CRUD();
  
    // $crud->set_theme('datatables');
@@ -33,20 +36,29 @@ class Transcript extends CI_Controller {
     $crud->set_relation('datesid','class_schedule','startdate');
  
  //hide billingid column
-      $crud->unset_columns('billingid', 'po');
+      $crud->unset_columns('billingid', 'po','status');
    
   
 	$crud->display_as('studentid','Student Name');
  	//$crud->display_as('billingid','Company');
  	$crud->display_as('classid','Course Title');
- 	$crud->display_as('dateid','Attended');
+ 	$crud->display_as('datesid','Class Date');
  	//$crud->display_as('po','CC-Email');
+		$crud->display_as('studentid','Student Name');
+		$crud->display_as('checkedIn','Checked In?');
+		$crud->display_as('userCancel','Student Cancel?');
 
-   
+   		$crud->display_as('noshow','No Show?');
+
    	$output = $crud->render();
    	$this->load->view('header',$output);
    	 $this->load->view('transcript_view', $output);
        	$this->load->view('footer');   	
+       	
+       	} else {
+       	
+       	$this->login();
+       	}
 	
 	}
 

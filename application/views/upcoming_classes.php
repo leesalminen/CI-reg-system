@@ -40,12 +40,12 @@ $(document).ready(function(){
   <form method="post" action="/reports/generateUpcomingClassesReport" id="upcomingClasses" name="upcomingClasses">
     	<label for="datepickerFrom">From Date</label> 
     	
-    	<input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('Y-m-d'); ?>" />
+    	<input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('Y-m-d'); ?>" /> (Required)
    		
    		<br />
    		
    		<label for="datepickerTo">To Date</label>&nbsp; &nbsp;&nbsp;
-   	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" />
+   	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
 		
 		<br /><br />
 		

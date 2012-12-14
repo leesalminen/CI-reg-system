@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="<?=base_url()?>css/main.css" type="text/css" />
- 
+ <script src="http://campus.zoodleweb.com/assets/grocery_crud/js/jquery-1.8.1.min.js"></script>
+
 <?php 
 if(isset($css_files)) { foreach($css_files as $file): ?>
     <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
@@ -79,7 +80,7 @@ function addStudentPopup(url) {
 <div id="header">
 	
 	<div id="title">
-		<h1>CampusLinc</h1>
+		<h1>Campus Linc WebApp</h1>
 	</div>
 	
 	
