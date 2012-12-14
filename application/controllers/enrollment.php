@@ -1,21 +1,24 @@
 <?php
 
-class Enrollment extends CI_Controller {
+class Enrollment extends Application {
 
 	
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
+		$this->load->library('ag_auth');
 		
 	}
 	
 	function index()
 	{
+	if(logged_in()) {
 		 $crud = new grocery_CRUD();
  
-  	$crud->unset_add_fields('status');
-	$crud->unset_columns('status');
+  	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow'));
+  	$crud->unset_columns('status');
+  	$crud->unset_edit_fields('status');
 
     $crud->set_table('enrollment');
     $crud->set_theme('datatables');
@@ -38,8 +41,9 @@ class Enrollment extends CI_Controller {
  	$crud->display_as('checkedIn','Checked In?');
  	 $crud->display_as('userCancel','Student Cancel?');
  	$crud->display_as('noshow','No Show?');
+ 	$crud->display_as('cancelNotes','Cancellation Notes');
 
-
+	  $crud->required_fields(array('companyid','studentid','billingid','classid','datesid'));
 
    
     //$crud->display_as('classname','Course Title', ");
@@ -74,6 +78,8 @@ class Enrollment extends CI_Controller {
   // $this->load->view('enrollment_view', $output2);
   // $this->load->view('enrollment_view', $finalOutput);
 	$this->load->view('footer');
+	
+	} else { $this->login(); }
 	
 	}
 	
@@ -125,7 +131,8 @@ class Enrollment extends CI_Controller {
 		
 		$this->db->select("*")
 				 ->from('class_schedule')
-				 ->where('classtitleid', $classtitleid);
+				 ->where('classtitleid', $classtitleid)
+				 ->where('startdate >=' , date('Y-m-d'));
 		$db = $this->db->get();
 		
 		$array = array();

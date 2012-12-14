@@ -1,6 +1,6 @@
 <?php
 
-class Transcript extends CI_Controller {
+class Transcript extends Application {
 
 	
 	function __construct()

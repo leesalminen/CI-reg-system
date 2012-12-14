@@ -46,8 +46,22 @@ $(document).ready(function(){
 				dataType: "json",
 				success: function(msg) {
 						$("#response").show();
-						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $("#response").html(msg);	} else {
-							$("#response").html(msg[0]);
+						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $.pnotify({
+						title: 'Report Not Generated!',
+						text: 'Individual Student Transcript report NOT generated! '+msg,
+						type: 'error',
+						delay: 10000
+
+					});
+	} else {
+							$.pnotify({
+						title: 'Report Generated!',
+						text: 'Individual Student Transcript Report Generated, click the link to save/print. '+msg[0],
+						type: 'success',
+						delay: 10000
+
+					});
+							//$("#response").html(msg[0]);
 							window.open((msg[1]), '', 'height=800,width=1000');
 						}			
 				}
@@ -85,8 +99,22 @@ $(document).ready(function(){
 				dataType: "json",
 				success: function(msg) {
 						$("#response2").show();
-						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $("#response2").html(msg);	} else {
-							$("#response2").html(msg[0]);
+						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $.pnotify({
+						title: 'Report Not Generated!',
+						text: 'Individual Student Transcript report NOT generated! '+msg,
+						type: 'error',
+						delay: 10000
+
+					});
+	} else {
+						$.pnotify({
+						title: 'Report Generated!',
+						text: 'Individual Student Transcript Report Generated, click the link to save/print. '+msg[0],
+						type: 'success',
+						delay: 10000
+
+					});
+							//$("#response2").html(msg[0]);
 							window.open((msg[1]), '', 'height=800,width=1000');
 						}			
 				}

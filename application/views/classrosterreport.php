@@ -33,7 +33,7 @@ $(document).ready(function(){
 	var form = $(this);
 	var post_url = form.attr('action');
 	var post_data = form.serialize();	
-	$('#orderNotes').append('<img src="/updates/concrete5.5.2.1/concrete/images/throbber_white_16.gif" id="throbber" />');
+	//$('#orderNotes').append('<img src="/updates/concrete5.5.2.1/concrete/images/throbber_white_16.gif" id="throbber" />');
 			$.ajax({
 				type:'POST',
 				url: post_url,
@@ -43,10 +43,10 @@ $(document).ready(function(){
 						$("#response").html(msg);
 						$("#response").show();
 						
-					  //var generator=window.open('','Check In Sheet','height=800,width=1000');
+					 // var generator=window.open('','Check In Sheet','height=800,width=1000');
 
-					 // generator.document.write(msg);
-					 // generator.document.close();
+					// generator.document.write(msg);
+					 //generator.document.close();
 
 				
 				}

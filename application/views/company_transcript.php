@@ -24,8 +24,22 @@ $(document).ready(function(){
 				dataType: "json",
 				success: function(msg) {
 						$("#response").show();
-						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $("#response").html(msg);	} else {
-							$("#response").html(msg[0]);
+						if(msg == '<p style="color:red;font-weight:bold;">No Classes Found.</p>') { $.pnotify({
+						title: 'Report Not Generated!',
+						text: 'Organizational Transcript With Tuition report NOT generated! '+msg,
+						type: 'error',
+						delay: 10000
+
+					});
+	} else {
+						$.pnotify({
+						title: 'Report Generated!',
+						text: 'Organizational Transcript With Tuition report generated! Click the link to save/print. '+msg[0],
+						type: 'success',
+						delay: 10000
+
+					});
+							//$("#response").html(msg[0]);
 							window.open((msg[1]), '', 'height=800,width=1000');
 						}			
 				}
@@ -39,7 +53,7 @@ $(document).ready(function(){
 <div style='height:20px;'></div> 
 
 <div style="width:100%;">
-<h1>Company/Organization Transcript Report</h1>
+<h1>Organizational Transcript With Tuition</h1>
 <p>This report will generate a transcript for an organization showing all students for that organization and which classes they have attended.</p>
 
 	<h4>Search by Company</h4>

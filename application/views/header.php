@@ -106,8 +106,9 @@ function addStudentPopup(url) {
     	
     			<li><a href="http://campus.zoodleweb.com/checkin"><span class="icon"><img src="<?=base_url()?>images/check-in.png" alt="Check In" /></span>Check-In</a></li>
     			<li><a href="http://campus.zoodleweb.com/enrollment"><span class="icon"><img src="<?=base_url()?>images/register.png" alt="Register" /></span>Register</a></li>
-    			<li><a href="http://campus.zoodleweb.com/student/"><span class="icon"><img src="<?=base_url()?>images/students.png" alt="Students" /></span>Students</a></li>
     			<li><a href="http://campus.zoodleweb.com/company/"><span class="icon"><img src="<?=base_url()?>images/companies.png" alt="Companies" /></span>Companies</a></li>
+    			<li><a href="http://campus.zoodleweb.com/billing/"><span class="icon"><img src="<?=base_url()?>images/billing.png" alt="Billing" /></span>Billing</a></li>
+    			<li><a href="http://campus.zoodleweb.com/student/"><span class="icon"><img src="<?=base_url()?>images/students.png" alt="Students" /></span>Students</a></li>
 				<li><a href="http://campus.zoodleweb.com/classschedule"><span class="icon"><img src="<?=base_url()?>images/courses.png" alt="Courses" /></span>Courses</a></li>
 			
 			</ul>

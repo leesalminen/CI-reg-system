@@ -1,6 +1,6 @@
 <?php
 
-class Billing extends CI_Controller {
+class Billing extends Application {
 
 	
 	function __construct()
@@ -8,11 +8,13 @@ class Billing extends CI_Controller {
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
 		$this->load->helper('url');
+		$this->load->library('ag_auth');
 		
 	}
 	
 	function index()
 	{
+	if($this->ag_auth->logged_in()) {
 		 $crud = new grocery_CRUD();
  
    // $crud->set_theme('datatables');
@@ -31,13 +33,7 @@ class Billing extends CI_Controller {
  	$crud->display_as('billingstate','Billing State');
  	$crud->display_as('billingzip','Billing Zip');
 	
-	$crud->required_fields('billingcontact');
-	$crud->required_fields('billingaddress');
-	$crud->required_fields('billingcity');
-	$crud->required_fields('billingstate');
-	$crud->required_fields('billingzip');
-
-
+	$crud->required_fields(array('billingcontact','billingaddress','billingcity','billingstate','billingzip'));
 
    
    $output = $crud->render();
@@ -45,6 +41,7 @@ class Billing extends CI_Controller {
     $this->load->view('billing_view', $output);
     	$this->load->view('footer');   
 	
+	} else {  $this->login(); }
 	
 	}
 

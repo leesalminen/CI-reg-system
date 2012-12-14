@@ -13,10 +13,13 @@
        		<a href="/studenttranscript">Individual Student Transcript Report</a>
        	</li>
        	<li>
-       		<a href="/companytranscript">Company Transcript Report</a>
+       		<a href="/companytranscript">Organizational Transcript With Tuition</a>
        	</li>
        	<li>
-       		<a href="/signinsheet">Printable Sign In Sheet By Course</a>
+       		<a href="/companytranscript/notuition">Organizational Transcript without Tuition</a>
+       	</li>
+       	<li>
+       		<a href="/signinsheet">Printable Sign In Sheet By Date & Course</a>
        	</li>
        	<li>
        		<a href="/classrosterreport">Class Roster Report</a>

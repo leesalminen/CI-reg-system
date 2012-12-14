@@ -1,17 +1,19 @@
 <?php
 
-class Student extends CI_Controller {
+class Student extends Application {
 
 	
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
-		
+		$this->load->library('ag_auth');
+
 	}
 	
 	function index()
 	{
+	if(logged_in()){
 		 $crud = new grocery_CRUD();
  
    // $crud->set_theme('datatables');
@@ -23,7 +25,7 @@ class Student extends CI_Controller {
     $crud->set_relation('companyid','company','companyname');
     $crud->set_relation('billingid','billing','billingcontact');
     
-   
+     $crud->required_fields(array('companyid','billingid','firstname','lastname','email'));
     
     
   	$crud->display_as('companyid','Company');
@@ -63,7 +65,7 @@ class Student extends CI_Controller {
    	$this->load->view('header',$output);
    	 $this->load->view('student_view', $output);
        	$this->load->view('footer');   	
-	
+	} else { $this->login(); }
 	}
 
 //get billing contact for sub dropdown

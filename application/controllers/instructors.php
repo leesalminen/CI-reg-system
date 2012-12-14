@@ -22,8 +22,10 @@ class Instructors extends CI_Controller {
     
     	$crud->display_as('instructor_name','Instructor Name');
  	   $crud->display_as('status','Instructor Status');
+ 	   $crud->required_fields('instructor_name','status');
  	   
    	$output = $crud->render();
+   	
    	
    	
    	$this->load->view('header', $output);

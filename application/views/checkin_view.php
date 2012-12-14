@@ -1,8 +1,7 @@
 <script>
-$(document).ready(function(){
 
-//$(".green").parent().css('background-color','#CCFFCC');
-//if($(".green")) { .find(".green").parent().css('background-color','#CCFFCC'); }
+$(document).ready(function(){
+setInterval('updateClock()', 1000);
 
 	$("#datepicker").change(function(){
 	var form = $(this);
@@ -57,25 +56,61 @@ $(document).ready(function(){
 	
 	
 	function checkInChange(data) {
-	if($("#cancelP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
-	if($("#noShowP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#cancelP"+data).hasClass('green')) { 
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+		//alert("Error! Other status active. Disable, then try again");
+		return false;
+	 }
+	if($("#noShowP"+data).hasClass('green')) {
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					}); 
+		//alert("Error! Other status active. Disable, then try again"); 
+		return false; 
+	}
 	
 		$.ajax({
 				type:'POST',
 				url: '/checkin/checkInChange',
 				data: 'id='+data,
 				dataType: "json",
+				cache: false,
 				success: function(msg) {
 						//alert(msg);
 						if(msg == '1') {
 							if($("#checkIn"+data).parent().hasClass('green') == false) {
 								$("#checkIn"+data).parent().addClass('green');
+								
 							} else {
 								$("#checkIn"+data).parent().removeClass('green');
+
 							}
 							
 						} else { 
-							alert('Error. Try Again.');
+							$.pnotify({
+						title: 'Uh Oh!',
+						text: 'Something went wrong, try again in a few seconds. If this continues happening, please tell Lee or Brett.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4
+
+					});
+
+							//alert('Error. Try Again.');
 						}
 				}
 		});
@@ -83,22 +118,62 @@ $(document).ready(function(){
 	
 	
 	function cancelChange(data) {
-	if($("#checkInP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
-	if($("#noShowP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#checkInP"+data).hasClass('green')) { 
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+
+	//alert("Error! Other status active. Disable, then try again"); 
+	return false; 
+	}
+	if($("#noShowP"+data).hasClass('green')) { 
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+
+	//alert("Error! Other status active. Disable, then try again");
+	return false;
+	}
 		$.ajax({
 				type:'POST',
 				url: '/checkin/cancelChange',
 				data: 'id='+data,
 				dataType: "json",
+				cache: false,
 				success: function(msg) {
 						//alert(msg);
 						if(msg == '1') {
 							if($("#cancel"+data).parent().hasClass('green') == false) {
 								$("#cancel"+data).parent().addClass('green');
+								
+
+								
 							} else {
 								$("#cancel"+data).parent().removeClass('green');
+								
 							}						} else { 
-							alert('Error. Try Again.');
+							//alert('Error. Try Again.');
+							$.pnotify({
+						title: 'Uh Oh!',
+						text: 'Something went wrong, try again in a few seconds. If this continues happening, please tell Lee or Brett.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4
+
+					});
+
 						}
 				}
 		});
@@ -108,31 +183,101 @@ $(document).ready(function(){
 			
 	
 	function noShowChange(data) {
-	if($("#checkInP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
-	if($("#cancelP"+data).hasClass('green')) { alert("Error! Other status active. Disable, then try again"); return false; }
+	if($("#checkInP"+data).hasClass('green')) {
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+
+		//alert("Error! Other status active. Disable, then try again");
+		return false;
+	}
+	if($("#cancelP"+data).hasClass('green')) { 
+		$.pnotify({
+						title: 'Error Changing CheckIn Status',
+						text: 'Other status active for that student. Disable, then try again.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+
+		//alert("Error! Other status active. Disable, then try again");
+		return false; 
+	}
 
 		$.ajax({
 				type:'POST',
 				url: '/checkin/noShowChange',
 				data: 'id='+data,
 				dataType: "json",
+				cache: false,
 				success: function(msg) {
 						//alert(msg);
 						if(msg == '1') {
 							if($("#noShow"+data).parent().hasClass('green') == false) {
 								$("#noShow"+data).parent().addClass('green');
+								
+
 							} else {
 								$("#noShow"+data).parent().removeClass('green');
+							
+
 							}
 						} else { 
-							alert('Error. Try Again.');
+							//alert('Error. Try Again.');
+							$.pnotify({
+						title: 'Uh Oh!',
+						text: 'Something went wrong, try again in a few seconds. If this continues happening, please tell Lee or Brett.',
+						type: 'error',
+						nonblock:true,
+						nonblock_opacity: .4
+
+					});
+
 						}
 				}
 		});
 	
 	
 	
-	}			
+	}		
+	
+	function updateClock ( )
+    {
+    var currentTime = new Date ( );
+    var currentHours = currentTime.getHours ( );
+    var currentMinutes = currentTime.getMinutes ( );
+    var currentSeconds = currentTime.getSeconds ( );
+
+    // Pad the minutes and seconds with leading zeros, if required
+    currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+    currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+
+    // Choose either "AM" or "PM" as appropriate
+    var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
+
+    // Convert the hours component to 12-hour format if needed
+    currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+
+    // Convert an hours component of "0" to "12"
+    currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+
+    // Compose the string for display
+    var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+    
+    
+    $("#clock").html(currentTimeString);
+        
+ }
+ 
+		
 </script>
 	<div id="banner-bar">
 		<h2>Check In … Shows Todays Classes Only (Change to today before launch)</h2>
@@ -163,7 +308,8 @@ $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 <hr />
 -->
     <div>
-       <h2>Live Check In</h2>
+       <h2 style="margin-bottom:0;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></h2>
+       <h4 style="margin-top:5px;">Logged In As: <?=$username;?>. Not <?=$username;?>? <a href="/logout">Logout</a></h4>
        <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
        
        

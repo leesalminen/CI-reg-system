@@ -1,4 +1,4 @@
-<h2>Manage Users</h2>
+<h2>Manage Users - <a href="/logout">Click Here to Logout</a></h2>
 
 <?php echo $this->table->generate(); ?>
 

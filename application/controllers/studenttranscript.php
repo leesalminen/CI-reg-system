@@ -15,8 +15,12 @@ class Studenttranscript extends Application {
 	{	
 	if(logged_in())
 		{
-				
-   		$this->load->view('header');
+		
+		$output['js_files'] = array('//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js','/css/jquery.pnotify.min.js');
+		$output['css_files'] = array('http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css','/css/jquery.pnotify.default.css','/css/jquery.pnotify.default.icons.css');
+
+		
+   		$this->load->view('header',$output);
    	    $this->load->view('student_transcript');
 		$this->load->view('footer');
 		} else {

@@ -63,7 +63,7 @@ $(document).ready(function(){
     
     <div style="height:25px;">&nbsp;</div>
     
-   <h1>Generate Daily Sign In Sheet</h1>
+   <h1>Printable Sign In Sheet By Date & Course</h1>
    <p>Select a Date and a course to generate a sign in sheet for print.</p>
    	
     <form method="post" action="/checkin/generateCheckinSheet" id="generateCheckin" name="generateCheckin">

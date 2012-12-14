@@ -1,17 +1,20 @@
 <?php
 
-class Classschedule extends CI_Controller {
+class Classschedule extends Application {
 
 	
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
+		$this->load->library('ag_auth');
+
 		
 	}
 	
 	function index()
 	{
+	if(logged_in()) {
 		 $crud = new grocery_CRUD();
 		 
 		 
@@ -23,6 +26,7 @@ class Classschedule extends CI_Controller {
     $crud->set_relation('classtitleid','class_titles','classname');
     $crud->set_relation('instructor','instructors','instructor_name');
     
+    $crud->required_fields(array('classtitleid','startdate','enddate','duration','laptops','type','cancelled','location','instructor'));
     
     	$crud->display_as('classtitleid','Class');
     	$crud->display_as('startdate','Start Date');
@@ -31,7 +35,7 @@ class Classschedule extends CI_Controller {
  	   $crud->display_as('laptops','Laptops Needed?');
  	   $crud->display_as('cancelled','Class Cancelled?');
  	   
- 	   
+ 	   $crud->order_by('startdate');
    	$output = $crud->render();
    	
 
@@ -39,7 +43,7 @@ class Classschedule extends CI_Controller {
    	$this->load->view('header', $output);
     $this->load->view('classschedule_view', $output);
    	$this->load->view('footer');
- 		
+ 	} else { $this->login();}
 	}
 	
 	
