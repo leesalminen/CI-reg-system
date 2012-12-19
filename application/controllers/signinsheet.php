@@ -36,7 +36,7 @@ class Signinsheet extends CI_Controller {
 	$query = $this->db->query('SELECT * FROM enrollment LEFT JOIN class_titles as jd45e51a1 ON jd45e51a1.id = enrollment.classid LEFT JOIN class_schedule as jdd77bf35 ON jdd77bf35.id = enrollment.datesid
  WHERE startdate = "' .$date. '" AND status = "1"');
  	
-	$output = '';
+	$output = array();
 
 	if ($query->num_rows() > 0)
 		{
@@ -45,7 +45,7 @@ class Signinsheet extends CI_Controller {
   			{
       			if($row->classname) 
       			{
-      				$output .= '<option value="' .$row->classid. '">' .$row->classname. '</option>';
+      				$output[]= '<option value="' .$row->classid. '">' .$row->classname. '</option>';
       			}
    			}
    			

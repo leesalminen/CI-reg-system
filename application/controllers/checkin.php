@@ -74,7 +74,7 @@ ORDER BY student.lastname
 	   			}
 	   			
 	   
-			} 	
+			 	
 
 		$table =  $this->table->generate();
 	   			
@@ -90,7 +90,10 @@ ORDER BY student.lastname
  		$this->load->view('checkin_view',$output);
  		$this->load->view('footer'); 	
  		
- 		} else { $this->login(); }
+ 	} else { $output['js_files'] = array();
+		$output['css_files'] = array() ;$output['username'] = username();$output['noRows'] = '1'; $this->load->view('header',$output);
+ 		$this->load->view('checkin_view',$output);
+ 		$this->load->view('footer');  }	} else { $this->login(); }
  		
  		
  		
@@ -106,7 +109,7 @@ ORDER BY student.lastname
 	$query = $this->db->query('SELECT * FROM enrollment LEFT JOIN class_titles as jd45e51a1 ON jd45e51a1.id = enrollment.classid LEFT JOIN class_schedule as jdd77bf35 ON jdd77bf35.id = enrollment.datesid
  WHERE startdate = "' .$date. '" AND cancelled = "No"');
  	
-	$output = '';
+	$output = array();
 
 	if ($query->num_rows() > 0)
 		{
@@ -115,11 +118,12 @@ ORDER BY student.lastname
   			{
       			if($row->classname) 
       			{
-      				$output .= '<option value="' .$row->classid. '">' .$row->classname. '</option>';
+      				$output[]= '<option value="' .$row->classid. '">' .$row->classname. '</option>';
       			}
    			}
    			
-   			echo json_encode($output);
+   			$unique = array_unique($output);
+   			echo json_encode($unique);
    
 		} else {
 		

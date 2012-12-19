@@ -333,13 +333,13 @@ $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 <hr />
 -->
     <div>
-    	<input id="numRows" type="hidden" value="<?=$numRows;?>" />
+    	<?php if(isset($numRows)) { ?> <input id="numRows" type="hidden" value="<?=$numRows;?>" /><?php } ?>
        <h2 style="margin-bottom:0;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></h2>
        <h4 style="margin-top:5px;">Logged In As: <?=$username;?>. Not <?=$username;?>? <a href="/logout">Logout</a></h4>
        <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
        
        
-        <?php echo $table; ?>
+      <?php if(!isset($noRows)) { echo $table; } else { echo '<h1>No Active Enrollments for Today.</h1>'; } ?>
  
     </div>
   

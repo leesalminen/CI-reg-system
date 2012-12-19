@@ -16,8 +16,8 @@ class Enrollment extends Application {
 	if(logged_in()) {
 		 $crud = new grocery_CRUD();
  
-  	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow'));
-  	$crud->unset_columns('status');
+  	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow','invoiceID'));
+  	$crud->unset_columns(array('status','cancelNotes','invoiceStatus'));
   	$crud->unset_edit_fields('status');
 
     $crud->set_table('enrollment');
@@ -42,12 +42,16 @@ class Enrollment extends Application {
  	 $crud->display_as('userCancel','Student Cancel?');
  	$crud->display_as('noshow','No Show?');
  	$crud->display_as('cancelNotes','Cancellation Notes');
+ 	 	$crud->display_as('invoiceStatus','Invoice Status (mark as paid if free re-take)');
+ 	 	$crud->display_as('invoiceID','Invoice #');
+
 
 	  $crud->required_fields(array('companyid','studentid','billingid','classid','datesid'));
 
    
     //$crud->display_as('classname','Course Title', ");
 
+	 $crud->callback_after_insert(array($this, 'emailUserOnRegister'));
 
 
    
@@ -145,6 +149,43 @@ class Enrollment extends Application {
 	
 	}
 
+
+	function emailUserOnRegister($post_array,$primary_key) {
+		
+		$this->load->database();
+	
+		$sql = 'select firstname,lastname,email,ccemail,class_titles.classname,class_schedule.startdate from enrollment
+left join student as student on student.id = enrollment.studentid
+left join class_titles as class_titles on class_titles.id = enrollment.classid
+left join class_schedule as class_schedule on class_schedule.id = enrollment.datesid
+where enrollment.id = "' .$primary_key. '"
+LIMIT 1';
+		
+		$query = $this->db->query($sql);
+		
+		if($query->num_rows() > 0) {
+		$row = $query->row();
+		
+		$userEmail = $row->email;
+		$ccEmail = $row->ccemail;
+		//$ccEmail = 'leesalminen@gmail.com';
+	
+		$this->load->library('email');
+
+$this->email->from('enrollment@campuslinc.com', 'Campus Linc WebApp');
+$this->email->to($userEmail); 
+if($ccEmail != '') { $this->email->cc($ccEmail); }
+$this->email->bcc('leesalminen@gmail.com');
+
+$this->email->subject('New Enrollment For ' .$row->classname);
+$this->email->message('Hello ' .$row->firstname. ' ' .$row->lastname. ",\nYou have been enrolled in" .$row->classname. " with Campus Linc. This class starts on " .$row->startdate. ".\nCampus Linc is located at: 25 John Glenn Drive, Suite 102, Amherst NY 14228. If you have any questions or would like to change your reservation, please call us at 716-688-8688.\n\n\nThank You!\nCampus Linc");	
+
+$this->email->send();
+	}
+	
+	return true;
+	
+	}
 	
 	
 }//end of extender

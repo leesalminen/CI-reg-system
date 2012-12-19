@@ -24,7 +24,7 @@
        	<li>
        		<a href="/classrosterreport">Class Roster Report</a>
        	</li>
-    </ul>
+       	    </ul>
     
  
     </div>

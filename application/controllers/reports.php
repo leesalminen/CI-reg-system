@@ -29,8 +29,9 @@ class Reports extends Application {
 	
 		if(logged_in())
 		{
-	
-		$this->load->view('header');
+		$output['js_files'] = array('//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js');
+		$output['css_files'] = array('/assets/jquery-ui-1.9.2.custom.min.css');
+		$this->load->view('header',$output);
 
    	    $this->load->view('upcoming_classes');
 		$this->load->view('footer');
@@ -55,7 +56,7 @@ class Reports extends Application {
 		if($_POST['datepickerFrom'] == '') {echo json_encode("<p style=\"font-weight:bold;color:red;\">Choose a From Date</p>");exit;} else {
 		$from = $_POST['datepickerFrom'];
 		}
-		if($_POST['datepickerTo'] == '') {
+		if($_POST['datepickerTo'] != '') {
 			$to = $_POST['datepickerTo'];
 		} else {
 			$to = '2050-12-31';

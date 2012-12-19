@@ -1,7 +1,3 @@
-<link type="text/css" rel="stylesheet" href="http://campus.zoodleweb.com/assets/grocery_crud/css/ui/simple/jquery-ui-1.8.23.custom.css" />
-<script src="http://campus.zoodleweb.com/assets/grocery_crud/js/jquery-1.8.1.min.js"></script>
-<script src="http://campus.zoodleweb.com/assets/grocery_crud/js/jquery_plugins/ui/jquery-ui-1.8.23.custom.min.js"></script>
- 
 <script>
 $(document).ready(function(){		
 	$("#upcomingClasses").submit(function(){
