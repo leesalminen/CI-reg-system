@@ -972,12 +972,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `group_id`, `token`, `identifier`) VALUES
-(1, 'administrator', 'bburnsworth@zoodlemarketing.com', 'f8d8cb20571630d970cafc0bf5d8fb9e8a29c628658479b147cd0769b0a44e28', 1, '', ''),
-(2, 'leedavid', 'lee@zoodlemarketing.com', 'e3019ebc06583a50bf32ed30ea0ceeef7f11efcfd116f04cacd2e08ca5b98b03', 100, '', ''),
-(5, 'bburnsworth', 'b.burnsworth@zoodlemarketing.com', '3835c3fb4f977c7e4cf4af4cfbea79b751c4af8e5dc293e0ebaba81feec6fe4c', 100, '', ''),
-(6, 'jason', 'jason@campuslinc.com', '12964c2d3fc30e6c8a605524c70930cd4ef2ea17bcbf17c9aaf73a6357d15ad9', 100, '', ''),
-(7, 'dimas', 'dimas@campuslinc.com', '83f4dc5cf83add1a9408ceb385bd061889aaa32d4907e11cb84e273e74665805', 100, '', ''),
-(8, 'shaune', 'shaune@campuslinc.com', 'aaf8785cbf8c569b7874b3411bd3fceecdfe321241563c19cc58d75bfda15d4a', 100, '', '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
