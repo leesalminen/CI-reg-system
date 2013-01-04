@@ -11,7 +11,8 @@ $(document).ready(function() {
 				data: post_data,
 				dataType: "json",
 				success: function(msg) {
-						$("#response").html(msg);
+						$("#response").append(msg);
+						$("#ajax").hide();
 				}
 			});
 		return false;
@@ -25,7 +26,7 @@ $(document).ready(function() {
 <div style='height:20px;'></div> 
 
 <div>
-<h1>Reconcile Invoices</h1>
+<h1>Receive Payments</h1>
 <p>This page will list allow you to quickly mark invoices as paid. Simply enter the invoice number and click "Mark Invoice As Paid".</p>
 
 

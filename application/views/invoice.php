@@ -10,10 +10,13 @@
     			<a href="/invoice/viewUnBilledEnrollments">Generate Invoices By Billing Contact</a>
     		</li>
     		<li>
-    			<a href="/invoice/reconcileInvoices">Reconcile Invoices</a>
+    			<a href="/invoice/reconcileInvoices">Receive Payments</a>
     		</li>
     		<li>
     			<a href="/invoice/viewUnPaidInvoices">View UnPaid Invoices</a>
+    		</li>
+    		<li>
+    			<a href="/invoice/viewPaidInvoices">View/Print Paid Invoices</a>
     		</li>
     	</ul>    
  

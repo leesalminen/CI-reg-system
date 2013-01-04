@@ -50,22 +50,24 @@ class Reports extends Application {
 		$this->load->library('table');
 		$this->load->helper('file');
 		
-		$today = date("Y-m-d");
+		$today = date("m-d-Y");
 //		$output = '<table>';
 		
 		if($_POST['datepickerFrom'] == '') {echo json_encode("<p style=\"font-weight:bold;color:red;\">Choose a From Date</p>");exit;} else {
-		$from = $_POST['datepickerFrom'];
+		$from = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $_POST['datepickerFrom'])));
+		//$from = date('Y-m-d',strtotime($_POST['datepickerFrom']));
+		
 		}
 		if($_POST['datepickerTo'] != '') {
-			$to = $_POST['datepickerTo'];
+			$to = date('Y-m-d H:i:s',strtotime(str_replace('-', '/', $_POST['datepickerTo'])));
 		} else {
-			$to = '2050-12-31';
+			$to = '2050-12-31 00:00:00';
 		}
 		
 	//	$this->load->library('Pdf');
 		$this->load->database();
 		
-$sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\' AND `cancelled` = \'NO\'';
+$sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\' AND `cancelled` = \'NO\' ORDER BY startdate';
 
 			
 		$query = $this->db->query($sql);
@@ -97,7 +99,7 @@ $sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.sta
 		//print_r($array2);
 		
 		$numberOfClasses = $query->num_rows();
-		$today = date('Y-m-d');
+		$today = date('m-d-Y');
 		$this->table->set_heading('Class Name', 'Start Date', 'Location', 'Instructor', 'Notes', '# of Students');
 
 		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.png" /><h1>Upcoming Classes Report</h1><h3>This report was generated on: ' .$today. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
@@ -109,7 +111,7 @@ $sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.sta
 
 	   $classID = $arr->classtitleid;
 	   @$value = $array2[$classID];
-	   $this->table->add_row(array($arr->classname, $arr->startdate,  $arr->location, $arr->instructor, $arr->notes, $value));
+	   $this->table->add_row(array($arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)),  $arr->location, $arr->instructor, $arr->notes, $value));
 	   
 	   $classID = '';
 	   }

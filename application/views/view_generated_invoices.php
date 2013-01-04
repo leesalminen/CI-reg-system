@@ -27,7 +27,9 @@ function deleteInvoice(msg) {
 					});
     }
 }
-function emailInvoice(msg) {	
+function emailInvoice(msg) {
+	if(confirm('Are you sure you want to email invoice now? This will mark invoice as sent.'))
+	{
       $.get('/invoice/sendInvoice/'+msg, function(data) {
   	  //$('.result').html(data);
       $.pnotify({
@@ -41,7 +43,27 @@ function emailInvoice(msg) {
 					});
       
 	  });
+	} else { return false; }
 }
+function markAsSent(msg) {
+	if(confirm('Are you sure you want to mark invoice as sent? This can not be undone.'))
+	{
+      $.get('/invoice/markAsSent/'+msg, function(data) {
+  	  //$('.result').html(data);
+      $.pnotify({
+						title: 'Invoice Marked as Sent! <a href="/invoice/viewGeneratedInvoices">Click</a> to refresh page.',
+						text: data,
+						type: 'success',
+						nonblock:true,
+						nonblock_opacity: .4,
+						delay: 3500
+
+					});
+      
+	  });
+	} else { return false; }
+}
+
 
 
 </script>

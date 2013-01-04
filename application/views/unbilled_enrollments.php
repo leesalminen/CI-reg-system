@@ -91,7 +91,7 @@ function selectAllCheckbox() {
 }
 function unSelectAllCheckbox() {
 $(".checkbox").each( function() {
-		$(this).attr("checked",true);
+		$(this).attr("checked",false);
 	});
 }			
 </script>
@@ -145,3 +145,8 @@ $(".checkbox").each( function() {
 <script>
 $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 </script>
+
+
+<hr />
+
+<?php echo $output; ?>

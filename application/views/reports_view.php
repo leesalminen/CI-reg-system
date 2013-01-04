@@ -24,6 +24,22 @@
        	<li>
        		<a href="/classrosterreport">Class Roster Report</a>
        	</li>
+       	<li>
+       		<a href="/reminderemail">Student Reminder Emails</a>
+       	</li>
+       	
+       	<li>
+       		<a href="/aBComparison">Students Took Class A, But NOT Class B Report</a>
+       	</li>
+       	<li>
+       		<a href="/aeReport">Account Executive Report</a>
+       	</li>
+       	<li>
+       		<a href="/aeReport/enrollmentReport">Enrollment Report</a>
+       	</li>
+       	<li>
+       		<a href="/coursewarecostreport">Courseware Cost Report</a>
+       	</li>
        	    </ul>
     
  

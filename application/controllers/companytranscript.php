@@ -116,7 +116,7 @@ class Companytranscript extends Application {
 		$this->load->library('table');
 		$this->load->helper('file');
 		
-		$today = date("Y-m-d");
+		$today = date("m-d-Y");
 //		$output = '<table>';
 		
 		$company = $_POST['companies'];		
@@ -127,7 +127,7 @@ class Companytranscript extends Application {
 
 		//$sql = "SELECT * FROM enrollment WHERE studentid = '" .$student. "' AND companyid = '" .$company. "' AND status = '1' AND checkedin='1'";
 		
-		$sql = "SELECT enrollment.companyid,enrollment.studentid,enrollment.billingid,enrollment.classid,enrollment.datesid,enrollment.checkedIn,enrollment.userCancel,enrollment.noshow,enrollment.po,class_schedule.startdate,class_schedule.enddate,class_titles.tuition,class_titles.classname,student.billingid,student.firstname,student.lastname,billing.billingcontact
+		$sql = "SELECT enrollment.companyid,enrollment.studentid,enrollment.billingid,enrollment.classid,enrollment.datesid,enrollment.checkedIn,enrollment.userCancel,enrollment.noshow,enrollment.regType,class_schedule.startdate,class_schedule.enddate,enrollment.tuition,enrollment.courseware,class_titles.classname,student.billingid,student.firstname,student.lastname,billing.billingcontact
 FROM enrollment
 LEFT JOIN class_schedule ON ( enrollment.classid = class_schedule.classtitleid ) 
 LEFT JOIN class_titles ON ( enrollment.classid = class_titles.id ) 
@@ -135,6 +135,7 @@ LEFT JOIN student ON (enrollment.studentid = student.id)
 LEFT JOIN billing ON ( enrollment.billingid = billing.id )
 WHERE enrollment.companyid = '" .$company. "'
 AND cancelled = 'No'
+ORDER BY startdate
 ";
 
 $sql2 = 'SELECT companyname from company where id = \'' .$company. '\'';
@@ -151,8 +152,8 @@ $companyName = $result->row();
 		
 		//var_dump($array);
 		$numberOfClasses = count($array);
-		$today = date('Y-m-d');
-		$this->table->set_heading('Full Name', 'Class Name', 'Start Date', 'End Date', 'Purchase Order', 'Billing Contact', 'Attended?', 'Cancelled?', 'No Show?', 'Tuition');
+		$today = date('m-d-Y');
+		$this->table->set_heading('Full Name', 'Class Name', 'Start Date', 'End Date', 'Reg. Type', 'Billing Contact', 'Attended?', 'Cancelled?', 'No Show?', 'Tuition');
 
 		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><img src="../images/logo.png" /><h2> Company Transcript Report For: ' .$companyName->companyname. '</h2><h4>This report was generated on: ' .$today. '</h4><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
@@ -163,8 +164,12 @@ $companyName = $result->row();
 	   if($arr->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
 	   if($arr->userCancel == '1') { $cancelled = 'Yes';} else { $cancelled = 'No'; }
 	   if($arr->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
+	   if($arr->regType == 'Coupons') { $regType = 'C'; } elseif ($arr->regType == 'All Access Pass') { $regType = 'A'; } elseif ($arr->regType == 'MOA' ) { $regType = 'MOA'; } else { $regType = '';}
+	   //$totalCost = $arr->tuition + $arr->courseware;
+	   $totalCost = $arr->tuition;
+	   $totalCost = money_format('$%i',$totalCost);
 
-	   $this->table->add_row(array($arr->lastname. ', ' .$arr->firstname, $arr->classname, $arr->startdate, $arr->enddate, $arr->po, $arr->billingcontact, $checkedIn, $cancelled, $noShow, $arr->tuition));
+	   $this->table->add_row(array($arr->lastname. ', ' .$arr->firstname, $arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)), date('m-d-Y H:i:s',strtotime($arr->enddate)), $regType, $arr->billingcontact, $checkedIn, $cancelled, $noShow, $totalCost));
 	   
 	   }
 	   			$table =  $this->table->generate();
@@ -223,7 +228,7 @@ exit;
 		$this->load->library('table');
 		$this->load->helper('file');
 		
-		$today = date("Y-m-d");
+		$today = date("m-d-Y");
 //		$output = '<table>';
 		
 		$company = $_POST['companies'];		
@@ -241,6 +246,7 @@ LEFT JOIN class_titles ON ( enrollment.classid = class_titles.id )
 LEFT JOIN student ON (enrollment.studentid = student.id)
 WHERE enrollment.companyid = '" .$company. "'
 AND cancelled = 'No'
+ORDER BY startdate
 ";
 
 $sql2 = 'SELECT companyname from company where id = \'' .$company. '\'';
@@ -257,7 +263,7 @@ $companyName = $result->row();
 		
 		//var_dump($array);
 		$numberOfClasses = count($array);
-		$today = date('Y-m-d');
+		$today = date('m-d-Y');
 		$this->table->set_heading('Full Name', 'Class Name', 'Start Date', 'End Date', 'Attended?', 'Cancelled?', 'No Show?');
 
 		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><img src="../images/logo.png" /><h2> Company Transcript Report For: ' .$companyName->companyname. '</h2><h4>This report was generated on: ' .$today. '</h4><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
@@ -270,7 +276,7 @@ $companyName = $result->row();
 	   if($arr->userCancel == '1') { $cancelled = 'Yes';} else { $cancelled = 'No'; }
 	   if($arr->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
 
-	   $this->table->add_row(array($arr->lastname. ', ' .$arr->firstname, $arr->classname, $arr->startdate, $arr->enddate, $checkedIn, $cancelled, $noShow));
+	   $this->table->add_row(array($arr->lastname. ', ' .$arr->firstname, $arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)), date('m-d-Y H:i:s',strtotime($arr->enddate)), $checkedIn, $cancelled, $noShow));
 	   
 	   }
 	   			$table =  $this->table->generate();

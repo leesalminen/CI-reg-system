@@ -25,7 +25,6 @@ class Classtitles extends CI_Controller {
 
    
    $output = $crud->render();
-$this->output->enable_profiler(TRUE);
   	$this->load->view('header', $output);
     $this->load->view('coursetitle_view', $output);
 	$this->load->view('footer');

@@ -16,9 +16,9 @@ class Enrollment extends Application {
 	if(logged_in()) {
 		 $crud = new grocery_CRUD();
  
-  	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow','invoiceID'));
-  	$crud->unset_columns(array('status','cancelNotes','invoiceStatus'));
-  	$crud->unset_edit_fields('status');
+  	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow','invoiceID','reminderEmailSent','enrollmentTimestamp','enrollmentUser'));
+  	$crud->unset_columns(array('status','cancelNotes','invoiceStatus','emailStudent','reminderEmailSent','po','checkedIn','noshow','courseware','regType'));
+  	$crud->unset_edit_fields('status','reminderEmailSent','companyid','billingid','classid','datesid','enrollmentTimestamp','enrollmentUser');
 
     $crud->set_table('enrollment');
     $crud->set_theme('datatables');
@@ -41,12 +41,20 @@ class Enrollment extends Application {
  	$crud->display_as('checkedIn','Checked In?');
  	 $crud->display_as('userCancel','Student Cancel?');
  	$crud->display_as('noshow','No Show?');
+ 	$crud->display_as('emailStudent','Email Student?');
+ 	 	$crud->display_as('tuition','List Price');
+ 	 	 	 	$crud->display_as('regType','Reg. Type');
+
+
  	$crud->display_as('cancelNotes','Cancellation Notes');
  	 	$crud->display_as('invoiceStatus','Invoice Status (mark as paid if free re-take)');
  	 	$crud->display_as('invoiceID','Invoice #');
+ 	 		$crud->display_as('enrollmentUser','User');
+ 	 	$crud->display_as('enrollmentTimestamp','Timestamp');
 
 
-	  $crud->required_fields(array('companyid','studentid','billingid','classid','datesid'));
+
+	  $crud->required_fields(array('companyid','studentid','billingid','classid','datesid','tuition','courseware'));
 
    
     //$crud->display_as('classname','Course Title', ");
@@ -74,6 +82,8 @@ class Enrollment extends Application {
 	
 	
 	//print_r($dd_data);
+	
+	
 	
 
 	//$this->output->enable_profiler(TRUE);
@@ -141,7 +151,7 @@ class Enrollment extends Application {
 		
 		$array = array();
 		foreach($db->result() as $row):
-			$array[] = array("value" => $row->id, "property" => $row->startdate);
+			$array[] = array("value" => $row->id, "property" => date("m-d-Y",strtotime($row->startdate)));
 		endforeach;
 		
 		echo json_encode($array);
@@ -151,10 +161,20 @@ class Enrollment extends Application {
 
 
 	function emailUserOnRegister($post_array,$primary_key) {
-		
+		date_default_timezone_set("Asia/Manila");
 		$this->load->database();
+		$this->load->helper('ag_auth');
+		date_default_timezone_set('America/New_York');
+		$now = date('m-d-Y H:i:s');
+		
+		$sql = "UPDATE enrollment SET enrollmentTimestamp = \"" .$now. "\" , enrollmentUser = \"" .username(). "\" WHERE id = \"" .$primary_key. "\"";
+		$this->db->query($sql);
+
+		
 	
-		$sql = 'select firstname,lastname,email,ccemail,class_titles.classname,class_schedule.startdate from enrollment
+	if($post_array['emailStudent'] == '1') {
+	
+		$sql = 'select firstname,lastname,email,ccemail,class_titles.classname,class_schedule.location,class_schedule.duration,class_schedule.startdate from enrollment
 left join student as student on student.id = enrollment.studentid
 left join class_titles as class_titles on class_titles.id = enrollment.classid
 left join class_schedule as class_schedule on class_schedule.id = enrollment.datesid
@@ -164,6 +184,7 @@ LIMIT 1';
 		$query = $this->db->query($sql);
 		
 		if($query->num_rows() > 0) {
+		
 		$row = $query->row();
 		
 		$userEmail = $row->email;
@@ -172,20 +193,69 @@ LIMIT 1';
 	
 		$this->load->library('email');
 
-$this->email->from('enrollment@campuslinc.com', 'Campus Linc WebApp');
+$this->email->from('enrollment@campuslinc.com', 'Campus Linc Online Registration');
 $this->email->to($userEmail); 
 if($ccEmail != '') { $this->email->cc($ccEmail); }
 $this->email->bcc('leesalminen@gmail.com');
 
 $this->email->subject('New Enrollment For ' .$row->classname);
-$this->email->message('Hello ' .$row->firstname. ' ' .$row->lastname. ",\nYou have been enrolled in" .$row->classname. " with Campus Linc. This class starts on " .$row->startdate. ".\nCampus Linc is located at: 25 John Glenn Drive, Suite 102, Amherst NY 14228. If you have any questions or would like to change your reservation, please call us at 716-688-8688.\n\n\nThank You!\nCampus Linc");	
+
+if($row->location == 'Campus Linc') {
+
+$this->email->message("Greetings,\n\nYou are now registered for " .$row->classname. " on " .date('m-d-Y H:i:s',strtotime($row->startdate)). " at " .$row->location. ". This class lasts for " .$row->duration. " Hours.\n\nClass will be held at 25 John Glenn Drive in Amherst, NY. A map to our location can be found here - http://www.campuslinc.com/Directions.asp.  You can click on the red marker for directions.\n\n*** Parking is behind the building.  If you’re coming from the thruway and Sweet Home Road, turn left on N. French Road.  Turn into the driveway on the left after John Glenn Drive; you’ll see the Campus Linc Parking sign.  There is a sidewalk to the right of the building that will bring you to the front. Campus Linc is the first entrance you come to at the front of the building.  There is handicapped parking in the front lot.\n\nCourseware will be provided to take with you after class.  You may want to bring a pen and notebook.\n\nIf you have additional questions prior to class, please feel free to call me at 716-688-8688.  Thank you for your registration.\n\nCancellation Policy:\nStudents needing to cancel a class must provide at least five business days advance notice for desktop applications and project management courses, ten business days for technical computer courses.\nStudents who fail to attend a class for which they are enrolled will be charged full price.\nIf the registered participant is unable to attend the course, a substitute is welcome to take their place.\n\nCampus Linc Inc. reserves the right to cancel a course due to low enrollment or circumstances beyond our control.  Every effort will be made to reschedule a cancelled class or transfer enrollment to a later date.\n\n-- Campus Linc\n716-688-8688\nwww.campuslinc.com\n");
+
+} else if($row->location == 'Canisius') {
+
+$this->email->message("Greetings,\n\nWe are confirming your registration for " .$row->classname. " on " .date('m-d-Y H:i:s',strtotime($row->startdate)). " at Canisius College Professional Center. This class lasts for " .$row->duration. " Hours.\n\nPlease reply to this e-mail so that I know you will be heading to Canisius Center and not the Campus Linc facility.  Thank you.\n\nCanisius Center is located at University Corporate Center, 300 Corporate Parkway, North Suite 130, Amherst, NY 14226. University Corporate Center is located just off of Maple Road near Sweet Home Road. Their phone number is (716)888-8490.\n\nWhen you drive into the complex, yield right and 300 Corporate Parkway is on your left.  Parking is on the right.  The entrance door is behind the Visitor Parking and has North 300 above the door.  Once you enter, Canisius Center will be the third door on the right.\n\nCourseware will be provided to take with you after class.  You may want to bring a pen and notebook.\n\nIf you have additional questions prior to class, please feel free to call me at 716-688-8688.  Thank you for your attendance.\n\n-- Campus Linc\n716-688-8688\nwww.campuslinc.com");
+
+
+} else if($row->location == 'Holiday Inn Rochester Airport') {
+
+
+$this->email->message("Greetings,\n\nYou are now registered for " .$row->classname. " on " .date('m-d-Y H:i:s',strtotime($row->startdate)). " at " .$row->location. ". This class lasts for " .$row->duration. " Hours.\n\nClass will be held at Holiday Inn Rochester Airport, 911 Brooks Avenue, Rochester, NY.  Their phone number is (585) 328-6000.\n\nCourseware will be provided to take with you after class.  You may want to bring a pen and notebook.\n\nIf you have additional questions prior to class, please feel free to call me at 716-688-8688.  Thank you for your registration.\n\nCancellation Policy:\nStudents needing to cancel a class must provide at least five business days advance notice for desktop applications and project management courses, ten business days for technical computer courses.\nStudents who fail to attend a class for which they are enrolled will be charged full price.\nIf the registered participant is unable to attend the course, a substitute is welcome to take their place.\n\nCampus Linc Inc. reserves the right to cancel a course due to low enrollment or circumstances beyond our control.  Every effort will be made to reschedule a cancelled class or transfer enrollment to a later date.\n\n-- Campus Linc\n716-688-8688\nwww.campuslinc.com");
+
+
+} else if($row->location == 'Customer Location') {
+
+return true;
+
+} else { return true; }
 
 $this->email->send();
 	}
 	
 	return true;
-	
+	} else { return true; }
 	}
 	
+	function getMSRP() {
+	
+	$this->load->database();
+	
+		$sql = 'select tuition,courseware from class_titles where id = "' .$_POST['classid']. '"';
+		
+		
+		$query = $this->db->query($sql);
+		
+		if($query->num_rows() > 0) {
+		$row = $query->row();
+		
+		$result = array('tuition'=>$row->tuition,'courseware'=>$row->courseware);
+		
+		echo json_encode($result);
+		
+		} else {
+		
+		echo json_encode('null');
+		
+		}
+		
+		
+		
+
+	
+	
+	}
+		
 	
 }//end of extender
