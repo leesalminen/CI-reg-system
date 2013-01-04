@@ -19,6 +19,10 @@ class Classtitles extends CI_Controller {
     $crud->set_theme('datatables');
     $crud->set_subject('Course Title');
     
+    
+    //LEEE
+    
+    $crud->unset_add();
     $crud->display_as('classname','Course Title');
 
 

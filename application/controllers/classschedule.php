@@ -27,7 +27,7 @@ class Classschedule extends Application {
   	 $crud->set_relation('classtitleid','class_titles','classname');
     $crud->set_relation('instructor','instructors','instructor_name');
     
-    $crud->required_fields(array('classtitleid','startdate','enddate','duration','laptops','type','cancelled','location','instructor'));
+    $crud->required_fields(array('classtitleid','startdate','enddate','duration','laptops','type','location','instructor'));
     
     	$crud->display_as('classtitleid','Class');
     	$crud->display_as('startdate','Start Date');
@@ -37,13 +37,14 @@ class Classschedule extends Application {
  	   $crud->display_as('cancelled','Class Cancelled?');
  	   $crud->display_as('duration','Duration (in Hours)');
  	   
- 	   
+ 	   $crud->unset_add_fields('cancelled');
  	   $crud->order_by('startdate');
   	
 // $crud->callback_column('startdate',array($this,'_callback_class_page'));
 
     $crud->add_action('Roster', '', '/classschedule/classroster',array($this,'_callback_class_page'));
 
+	$crud->callback_add_field('startdate',array($this,'_add_default_date_value'));
 
    
    	$output = $crud->render();
@@ -63,6 +64,13 @@ class Classschedule extends Application {
 		
 	}
 	
+	function _add_default_date_value(){
+        $value = !empty($value) ? $value : date("m-d-Y 09:00:00");
+        $return = '<input type="text" name="startdate" value="'.$value.'" id="field-startdate" class="datetime-input" maxlength="19" /> ';
+        $return .= '<a class="datetime-input-clear ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" tabindex="-1" role="button" aria-disabled="false">Clear</a> (mm/dd/yyyy) hh:mm:ss
+';
+        return $return;
+}
 	
 	public function classroster() {
 	
@@ -143,6 +151,35 @@ $numRows = $query->num_rows();
 	   			
 	   			}	   
 	
+	
+	
+	}
+	
+	function getLength() {
+	
+	$this->load->database();
+	
+		$sql = 'select length from class_titles where id = "' .$_POST['classid']. '"';
+		
+		
+		$query = $this->db->query($sql);
+		
+		if($query->num_rows() > 0) {
+		$row = $query->row();
+		
+		//$result = array('tuition'=>$row->tuition,'courseware'=>$row->courseware);
+		
+		echo json_encode($row->length);
+		
+		} else {
+		
+		echo json_encode('null');
+		
+		}
+		
+		
+		
+
 	
 	
 	}

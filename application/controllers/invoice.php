@@ -335,7 +335,7 @@ AND enrollment.billingid = \"" .$billingcontact. "\"
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.duration,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow FROM enrollment
+			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
@@ -379,25 +379,23 @@ AND enrollment.billingid = \"" .$billingcontact. "\"
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="225">Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="75">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="175">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Length</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Attended?</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;font-size:22px;" width="40">No Show?</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+	$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
 	    for($i=0;$i<$count;$i++) {
 	    
-	    	if($array[$i]->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
-	  		if($array[$i]->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
 	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
 	      	$totalCost = $array[$i]->tuition;	
 
 			
-			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td width="225">' .$array[$i]->classname. '</td><td width="75">$' .$totalCost. '</td><td width="175">' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td width="50">' .$array[$i]->duration. ' Hours</td><td width="50">' .$checkedIn. '</td><td width="40">' .$noShow. '</td></tr>';  
+			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td>' .$array[$i]->classname. '</td><td>$' .$totalCost. '</td><td>' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td>' .$array[$i]->po. '</td></tr>';  
 	    
 	    
 	    
 	    }
 	    	
-	   			$table .="<tr colspan=\"6\" height=\"5\"><td><br /></td></tr><tr><td colspan=\"7\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"6\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
+	   			$table .="<tr><td><br /></td></tr><tr><td colspan=\"5\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"5\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
 	   			
 	  			
 				// create new PDF document
@@ -466,14 +464,13 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.duration,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow FROM enrollment
+	$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 	LEFT JOIN billing as billing on billing.id = enrollment.billingid
 	WHERE enrollment.id = \"" .$enrollmentID. "\"
-	";
-	
+	";	
 	
 	
 		$query = $this->db->query($sql);
@@ -510,25 +507,24 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="225">Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="75">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="175">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Length</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Attended?</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;font-size:22px;" width="40">No Show?</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
 	    for($i=0;$i<$count;$i++) {
 	    
-	    	if($array[$i]->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
-	  		if($array[$i]->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
-	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
+	    	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
 	      	$totalCost = $array[$i]->tuition;	
 
 			
-			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td width="225">' .$array[$i]->classname. '</td><td width="75">$' .$totalCost. '</td><td width="175">' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td width="50">' .$array[$i]->duration. ' Hours</td><td width="50">' .$checkedIn. '</td><td width="40">' .$noShow. '</td></tr>';  
+				
+			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td>' .$array[$i]->classname. '</td><td>$' .$totalCost. '</td><td>' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td>' .$array[$i]->po. '</td></tr>'; 
 	    
 	    
 	    
 	    }
 	    	
-	   			$table .="<tr colspan=\"6\" height=\"5\"><td><br /></td></tr><tr><td colspan=\"7\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"6\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
+	   			$table .="<tr><td><br /></td></tr><tr><td colspan=\"5\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"5\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
 	   			
 	  			
 				// create new PDF document
@@ -626,7 +622,7 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.duration,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow,billing.billingemail,enrollment.id as enrollmentid FROM enrollment
+			$sql = "SELECT student.firstname, student.lastname,billing.billingemail, class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,enrollment.id as enrollmentid FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
@@ -668,26 +664,25 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="225">Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="75">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="175">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Length</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Attended?</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;font-size:22px;" width="40">No Show?</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
 	    for($i=0;$i<$count;$i++) {
 	    
-	    	if($array[$i]->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
-	  		if($array[$i]->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
-	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
+	    	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
 	      	$totalCost = $array[$i]->tuition;	
 
 			
-			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td width="225">' .$array[$i]->classname. '</td><td width="75">$' .$totalCost. '</td><td width="175">' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td width="50">' .$array[$i]->duration. ' Hours</td><td width="50">' .$checkedIn. '</td><td width="40">' .$noShow. '</td></tr>';  
+		$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td>' .$array[$i]->classname. '</td><td>$' .$totalCost. '</td><td>' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td>' .$array[$i]->po. '</td></tr>';  
+	    
+
 	    
 	    
 	    
 	    }
 	    	
-	   			$table .="<tr colspan=\"6\" height=\"5\"><td><br /></td></tr><tr><td colspan=\"7\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"6\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
-	   			
+	   		$table .="<tr><td><br /></td></tr><tr><td colspan=\"5\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"5\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";	   			
 	  			
 // create new PDF document
 $pdf = new TCPDF('landscape', PDF_UNIT, 'letter', true, 'UTF-8', false);
@@ -744,8 +739,7 @@ if($this->email->send()) {
 	
 		for($i=0;$i<$count;$i++) {
     
-    	if($array[$i]->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
-  		if($array[$i]->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
+    	
       	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
       	$totalCost = $array[$i]->tuition;	
       	
@@ -803,7 +797,7 @@ if($this->email->send()) {
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.duration,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow,billing.billingemail,enrollment.id as enrollmentid FROM enrollment
+				$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate, billing.billingemail, billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
@@ -845,25 +839,23 @@ if($this->email->send()) {
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="225">Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="75">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="175">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Length</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" width="50">Attended?</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;font-size:22px;" width="40">No Show?</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+	$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
 	    for($i=0;$i<$count;$i++) {
 	    
-	    	if($array[$i]->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
-	  		if($array[$i]->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
 	      	$fullname = $array[$i]->firstname. ' ' .$array[$i]->lastname;
 	      	$totalCost = $array[$i]->tuition;	
 
 			
-			$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td width="225">' .$array[$i]->classname. '</td><td width="75">$' .$totalCost. '</td><td width="175">' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td width="50">' .$array[$i]->duration. ' Hours</td><td width="50">' .$checkedIn. '</td><td width="40">' .$noShow. '</td></tr>';  
+				$table .='<tr style="margin-bottom:5px;border-bottom:2px solid #CCCCCC;"><td>' .$fullname. '</td><td>' .$array[$i]->classname. '</td><td>$' .$totalCost. '</td><td>' .date('m-d-Y',strtotime($array[$i]->startdate)). '</td><td>' .$array[$i]->po. '</td></tr>';    
 	    
 	    
 	    
 	    }
 	    	
-	   			$table .="<tr colspan=\"6\" height=\"5\"><td><br /></td></tr><tr><td colspan=\"7\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"6\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
+	   		$table .="<tr><td><br /></td></tr><tr><td colspan=\"5\" align=\"right\"><h4>Total Amount Due: " .$grossCost. "</h4><br /><br /></td></tr><tr><td colspan=\"5\" align=\"center\"><p>Please make all checks payable to Campus Linc. Payments are due within 30 days of issuance.</p><h2>Thank you for your business!</h2></td></tr></tbody></table></div>";
 	   			
 	  			
 // create new PDF document
@@ -1070,7 +1062,6 @@ AND createdAt <= \"" .$filter. "\"
          $crud->unset_delete();
          $crud->where('invoicePaidOn !=','');
          $crud->order_by('companyname','asc');
-	     $crud->unset_columns('enrollmentIDs','status');
 		$crud->set_relation_n_n('companyname', 'billing', 'company', 'id', 'companyid','companyname'); 
 		$crud->set_relation('billingID','billing','billingcontact');
 		$crud->display_as('billingID','Billing Contact');
@@ -1078,10 +1069,15 @@ AND createdAt <= \"" .$filter. "\"
 		$crud->display_as('createdAt','Invoice Created');
 		$crud->display_as('invoiceSentAt','Invoice Sent');
 		$crud->display_as('invoicePaidOn','Invoice Paid');
+				$crud->display_as('invoiceTotal','Invoice Total');
+				$crud->display_as('id','Invoice ID');
+
 		$crud->add_action('View/Print Invoice', '', '/invoice/printPaidInvoice',array($this,'_callback_class_page'));
 		$crud->add_action('Email Invoice', '', '/invoice/sendPaidInvoice',array($this,'_callback_class_page'));
+  $crud->callback_column('invoiceTotal',array($this,'_get_invoice_total'));
 
-
+		
+		$crud->columns('id','companyname','billingID','createdAt','invoiceSentAt','invoicePaidOn','invoiceTotal');
 		
 		
 		 $output = $crud->render();
@@ -1112,6 +1108,26 @@ public function markAsSent() {
 	$timestamp = date('m-d-Y H:i:s');
 	$sql = "UPDATE invoices SET status = \"Sent\", invoiceSentAt = \"" .$timestamp. "\" WHERE id = \"" .$invoiceID. "\"";
 	$this->db->query($sql);
+
+
+}
+
+function _get_invoice_total($value,$row) { 
+	$this->load->database();
+	$sql = "SELECT enrollmentIDs FROM invoices where id = \"" .$row->id. "\" LIMIT 1";
+	$query = $this->db->query($sql);
+	$enrollRow = $query->row();
+	$enrollments = explode(',',$enrollRow->enrollmentIDs);
+	$costArr = array();
+	foreach($enrollments as $enrollment) {
+		$sql = "SELECT tuition FROM enrollment WHERE id = \"" .$enrollment. "\" LIMIT 1";
+		$query = $this->db->query($sql);
+		$costArr[] = $query->row('tuition');
+		
+	}
+	
+	return money_format('$%(#2n', array_sum($costArr));
+
 
 
 }

@@ -62,6 +62,17 @@ class AG_Auth_model extends CI_Model
 		
 		return TRUE;
 	}
+	
+	public function changePassword($username,$password,$email) {
+
+		if($this->db->set('password',hash("haval256,5", 'mOrts61gong39gaE32lakEs' . $password))->where('username',$username)->update($this->user_table))
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
+	
+	}
 }
 
 /* End of file: ag_auth_model.php */

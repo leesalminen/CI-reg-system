@@ -47,5 +47,3 @@
 
 <div id="responseT" style="display:none;margin-top:30px;font-size:18px;"><strong>MSRP Tuition:</strong> </div>
 <div id="responseC" style="display:none;font-size:18px;"><strong>MSRP Courseware:</strong> </div>
-
-

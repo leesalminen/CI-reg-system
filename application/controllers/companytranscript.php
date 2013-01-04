@@ -164,7 +164,7 @@ $companyName = $result->row();
 	   if($arr->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
 	   if($arr->userCancel == '1') { $cancelled = 'Yes';} else { $cancelled = 'No'; }
 	   if($arr->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
-	   if($arr->regType == 'Coupons') { $regType = 'C'; } elseif ($arr->regType == 'All Access Pass') { $regType = 'A'; } elseif ($arr->regType == 'MOA' ) { $regType = 'MOA'; } else { $regType = '';}
+	   if($arr->regType == 'Coupons') { $regType = 'CPN'; } elseif ($arr->regType == 'All Access Pass') { $regType = 'AAP'; } elseif ($arr->regType == 'MOA' ) { $regType = 'MOA'; } else { $regType = '';}
 	   //$totalCost = $arr->tuition + $arr->courseware;
 	   $totalCost = $arr->tuition;
 	   $totalCost = money_format('$%i',$totalCost);
