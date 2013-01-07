@@ -19,32 +19,29 @@ $(document).ready(function(){
 	});					
 </script>
 
-<div style='height:20px;'></div> 
-
-<div style="width:100%;">
+<div class="row">
+<div class="span12">
 <h1>Courseware Cost Report</h1>
-<p>This report will show all courseware costs for a given date range. This report will only show enrollments that have been Checked In.</p>
+<div class="alert alert-info">This report will show all courseware costs for a given date range. <strong>This report does not include cancelled enrollments.</strong></div>
 
 	<h4>Search by Date Range</h4>
   <form method="post" action="/coursewarecostreport/generateCostReport" id="costReport" name="costReport">
   		    
-    	<label for="datepickerFrom">From Date</label> 
-    	
-    	<input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('m-d-Y'); ?>" /> (Required)
+    	<label for="datepickerFrom" style="font-weight:bold;">From Date</label><input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('m-d-Y'); ?>" /> (Required)
    		
    		<br />
    		
-   		<label for="datepickerTo">To Date</label>&nbsp; &nbsp;&nbsp;
-   	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
+   		<label for="datepickerTo" style="font-weight:bold;">To Date</label><input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
 		
 		<br /><br />
     		 
-   		<button type="submit" id="submit" class="submit">Generate Form</button>
+   		<button type="submit" id="submit" class="submit btn btn-primary">Generate Form</button>
    		
     </form>
     
     <div id="response" style="display:none;"></div>
 
+</div>
 </div>
    
 <script>

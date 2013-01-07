@@ -75,8 +75,7 @@ INNER JOIN company ON company.id = enrollment.companyid
 INNER JOIN salesperson ON salesperson.id = company.salesrepid
 WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\'
 AND `cancelled` = \'NO\'
-AND `enrollment`.`checkedIn` = "1"
-ORDER BY startdate';
+ORDER BY startdate,classname';
 			
 		$query = $this->db->query($sql);
 		$array = array();
@@ -88,7 +87,7 @@ ORDER BY startdate';
 		
 		$numberOfClasses = $query->num_rows();
 		$today = date('m-d-Y');
-		$this->table->set_heading('Class Name', 'Start Date', 'First Name', 'Last Name', 'Company', 'Start Date','Courseware Cost');
+		$this->table->set_heading('Class Name', 'Start Date', 'Student Name', 'Company','Courseware Cost');
 
 		$costArray = array();
 
@@ -99,7 +98,7 @@ ORDER BY startdate';
 	   $netSale = money_format('$%i',$netSale);
 	  
 	   
-	   $this->table->add_row(array($arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)),  $arr->firstname, $arr->lastname, $arr->companyname, $arr->startdate, $netSale));
+	   $this->table->add_row(array($arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)), $arr->lastname. ', ' .$arr->firstname, $arr->companyname, $netSale));
 	   
 	   $costArray[] = $arr->courseware;
 	 	   
@@ -109,7 +108,7 @@ ORDER BY startdate';
 		$grossCost = array_sum($costArray);
 		$grossCost = money_format('%(#2n', $grossCost);
 				
-				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.png" /><h1>Courseware Cost Report</h1><h3>This report was generated on: ' .$today. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Courseware Cost for Period (Checked In Enrollments ONLY): ' .$grossCost. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.jpg" /><h1>Courseware Cost Report</h1><h3>This report was generated on: ' .$today. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Courseware Cost for Period (Checked In Enrollments ONLY): ' .$grossCost. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
 

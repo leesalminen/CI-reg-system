@@ -124,7 +124,6 @@ $(document).ready(function(){
 				
 </script>
 
-<div style='height:20px;'></div> 
 
 <div style="width:100%;">
 <h1>Individual Student Transcript Report</h1>
@@ -159,7 +158,7 @@ $(document).ready(function(){
 <form method="post" action="/studenttranscript/searchForStudent" id="searchForStudent" name="searchForStudent">
     	<label for="studentLastName">Enter a Last Name: </label> 
     	<input type="text" placeholder="Last Name" id="studentLastName" name="studentLastName" />
-    	<button type="submit" id="submit2" class="submit">Search</button>
+    	<button type="submit" id="submit2" class="btn btn-primary">Search</button>
     	    			
 		<br /><br />
 		   		

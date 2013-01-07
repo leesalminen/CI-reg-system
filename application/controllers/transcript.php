@@ -19,7 +19,7 @@ class Transcript extends Application {
  
    // $crud->set_theme('datatables');
     $crud->set_table('enrollment');
-   $crud->set_theme('datatables');
+   //$crud->set_theme('datatables');
     $crud->set_subject('');
     //hide add, edit, delete buttons
             $crud->unset_add();

@@ -1,9 +1,8 @@
-	<div id="banner-bar">
-		<h2>Register</h2>
-	</div>
-    <div style='height:20px;'></div>  
-    <h3 style="margin:0;padding:0;">Cancellations? <a href="/cancellations">Click Here</a>.</h3>
-    <div>
+<div class="row">
+    <div class="alert span3">Cancellations? <a href="/cancellations">Click Here</a>.
+ </div>
+</div>
+    <div id="topspacegc">
     
 
         <?php echo $output; ?>

@@ -24,15 +24,12 @@
 </script>
 
 <?php } ?>
+<div class="alert alert-info">
+<span style="text-align:center;">Click the magnifying class next to any class to view Class Roster!</span>
+</div>
 
-<div id="banner-bar">
-		<h2>Courses</h2>
-	</div>
-    <div style='height:20px;'></div>  
-    <div>
+
+    <div id="topspacegc">
         <?php echo $output; ?>
  
-    </div>
-  
-
- 
+    </div> 

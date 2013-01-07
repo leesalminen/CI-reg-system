@@ -90,16 +90,10 @@ function cancelEnrollment(data) {
 	return false;
 }						
 </script>
-	<div id="banner-bar">
-		<h2>Cancel Enrollments</h2>
-	</div>
-    
-    
-    
-    <div style="height:25px;">&nbsp;</div>
-    
+<div class="row">
+	<div class="span12">    
    <h1>Cancel Enrollments</h1>
-   <p>This page will allow you to cancel individual or multiple enrollments for a single class. <strong>The table generated will only show students NOT SHOW checked in, no-show, or student cancelled.</strong></p> 
+   <div class="alert alert-info">This page will allow you to cancel individual or multiple enrollments for a single class. <strong>The table generated will only show students NOT SHOW checked in, no-show, or student cancelled.</strong></div> 
    	
     <form method="post" action="/cancellations/getEnrollmentsForClass" id="generateCheckin" name="generateCheckin">
     	<label for="datepicker">Date</label> 
@@ -115,7 +109,8 @@ function cancelEnrollment(data) {
     </form>
     
     <div id="response" style="display:none;"></div>
-    
+	</div>
+</div>
     <script>
 $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 </script>

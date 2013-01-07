@@ -1,7 +1,7 @@
 
 
-    <div style='height:20px;'></div>  
-    <div>
+ 
+   <div id="topspacegc">
         <?php echo $output; ?>
  
     </div>

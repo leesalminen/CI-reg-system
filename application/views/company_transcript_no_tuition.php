@@ -50,7 +50,7 @@ $(document).ready(function(){
 	});					
 </script>
 
-<div style='height:20px;'></div> 
+
 
 <div style="width:100%;">
 <h1>Organizational Transcript Without Tuition</h1>
@@ -72,7 +72,7 @@ $(document).ready(function(){
 		<br /><br />
 		</div>
 		 
-   		<button type="submit" id="submit" class="submit" style="display:none;">Generate Form</button>
+   		<button type="submit" id="submit" class="btn btn-primary" style="display:none;">Generate Form</button>
    		
     </form>
     

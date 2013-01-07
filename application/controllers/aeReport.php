@@ -114,6 +114,7 @@ ORDER BY startdate';
 			
 		$query = $this->db->query($sql);
 		$array = array();
+		if($query->num_rows() > 0) {
 		foreach($query->result() as $row){
 			$array[] = $row;
 		
@@ -143,7 +144,7 @@ ORDER BY startdate';
 		$grossCost = array_sum($costArray);
 		$grossCost = money_format('%(#2n', $grossCost);
 				
-				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.png" /><h1>Account Executive Report</h1><h3>This report was generated on: ' .$today. ' for ' .$array[0]->name. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Net Revenue for Period (Tuition - Courseware, Checked In ONLY): ' .$grossCost. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.jpg" /><h1>Account Executive Report</h1><h3>This report was generated on: ' .$today. ' for ' .$array[0]->name. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Net Revenue for Period (Tuition - Courseware, Checked In ONLY): ' .$grossCost. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
 
@@ -158,7 +159,8 @@ ORDER BY startdate';
 				} else {
      				//echo json_encode($table);
      				echo json_encode('<h2 style="color:red;"><a href="' .$filename. '" target="_blank">Click Here to Download Account Executive Report</a></h2>');
-				}
+				}	
+				} else { echo json_encode('<div class="alert alert-error">No Enrollments Found.</div>'); }
 
 //echo json_encode($array);
 exit;
@@ -242,7 +244,7 @@ ORDER BY startdate';
 		$grossCost2 = $grossCost2 + array_sum($costArray2);
 		$grossCost2 = money_format('%(#2n', $grossCost2);
 		
-				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.png" /><h1>Enrollment Report</h1><h3>This report was generated on: ' .$today. ' for ' .$array[0]->name. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Net Revenue for Period (Tuition - Courseware): ' .$grossCost. '</h4><h4>Net Revenue for Period (Including CXL/No Show): ' .$grossCost2. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+				$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.jpg" /><h1>Enrollment Report</h1><h3>This report was generated on: ' .$today. ' for ' .$array[0]->name. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Net Revenue for Period (Tuition - Courseware): ' .$grossCost. '</h4><h4>Net Revenue for Period (Including CXL/No Show): ' .$grossCost2. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
 

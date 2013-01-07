@@ -18,7 +18,7 @@ class Company extends Application {
  
    // $crud->set_theme('datatables');
     $crud->set_table('company');
-   $crud->set_theme('datatables');
+  // $crud->set_theme('datatables');
     $crud->set_subject('Company');
  
   $crud->set_relation('salesrepid','salesperson','name');

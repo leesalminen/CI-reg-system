@@ -55,19 +55,14 @@ $(document).ready(function(){
 		});
 	});					
 </script>
-	<div id="banner-bar">
-		<h2>Generate Class Roster Report</h2>
-	</div>
-    
-    
-    
-    <div style="height:25px;">&nbsp;</div>
+<div class="row">
+<div class="span12">
     
    <h1>Generate Class Roster Report</h1>
-   <p>Select a Date and a course to generate a class roster for that class.</p> 
+   <div class="alert alert-info">Select a Date and a course to generate a class roster for that class.</div> 
    	
     <form method="post" action="/classrosterreport/generateClassRosterReport" id="generateCheckin" name="generateCheckin">
-    	<label for="datepicker">Date</label> 
+    	<label for="datepicker"><b>Date:</b></label> 
     	<input type="text" id="datepicker" name="datepicker" placeholder="Choose Date" value="" />
    		
    		
@@ -75,12 +70,13 @@ $(document).ready(function(){
    		
    		</select>
 
-   		<button type="submit" id="submit" class="submit" style="display:none;">Generate Form</button>
+   		<button type="submit" id="submit" class="submit btn btn-primary" style="display:none;">Generate Form</button>
    		
     </form>
     
     <div id="response" style="display:none;"></div>
-    
+</div>
+
     <script>
 $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 </script>

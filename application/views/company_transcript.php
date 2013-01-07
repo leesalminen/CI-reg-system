@@ -50,8 +50,6 @@ $(document).ready(function(){
 	});					
 </script>
 
-<div style='height:20px;'></div> 
-
 <div style="width:100%;">
 <h1>Organizational Transcript With Tuition</h1>
 <p>This report will generate a transcript for an organization showing all students for that organization and which classes they have attended.</p>
@@ -72,7 +70,7 @@ $(document).ready(function(){
 		<br /><br />
 		</div>
 		 
-   		<button type="submit" id="submit" class="submit" style="display:none;">Generate Form</button>
+   		<button type="submit" id="submit" class="btn btn-primary" style="display:none;">Generate Form</button>
    		
     </form>
     

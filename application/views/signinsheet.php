@@ -55,19 +55,16 @@ $(document).ready(function(){
 		});
 	});					
 </script>
-	<div id="banner-bar">
-		<h2>Generate Sign In Sheet</h2>
-	</div>
+	
     
     
     
-    <div style="height:25px;">&nbsp;</div>
     
    <h1>Printable Sign In Sheet By Date & Course</h1>
    <p>Select a Date and a course to generate a sign in sheet for print.</p>
    	
     <form method="post" action="/checkin/generateCheckinSheet" id="generateCheckin" name="generateCheckin">
-    	<label for="datepicker">Date</label> 
+    	<label for="datepicker"><b>Date:</b></label> 
     	<input type="text" id="datepicker" name="datepicker" placeholder="Choose Date" value="" />
    		
    		
@@ -75,7 +72,7 @@ $(document).ready(function(){
    		
    		</select>
 
-   		<button type="submit" id="submit" class="submit" style="display:none;">Generate Form</button>
+   		<button type="submit" id="submit" class="submit btn btn-primary" style="display:none;">Generate Form</button>
    		
     </form>
     

@@ -19,11 +19,10 @@ $(document).ready(function(){
 	});					
 </script>
 
-<div style='height:20px;'></div> 
-
-<div style="width:100%;">
+<div class="row">
+<div class="span12">
 <h1>Enrollment Report</h1>
-<p>This report will show all enrollments for a specified date range and account executive.</p>
+<div class="alert alert-info">This report will show all enrollments for a specified date range and account executive.</div>
 
 	<h4>Search by AE And Date Range</h4>
   <form method="post" action="/aeReport/generateEnrollmentReport" id="aeReport" name="aeReport">
@@ -32,23 +31,24 @@ $(document).ready(function(){
     
     <br />
     
-    	<label for="datepickerFrom">From Date</label> 
+    	<label for="datepickerFrom" style="Font-weight:bold;">From Date</label> 
     	
     	<input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('m-d-Y'); ?>" /> (Required)
    		
    		<br />
    		
-   		<label for="datepickerTo">To Date</label>&nbsp; &nbsp;&nbsp;
+   		<label for="datepickerTo" style="Font-weight:bold;">To Date</label>
    	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
 		
 		<br /><br />
     		 
-   		<button type="submit" id="submit" class="submit">Generate Form</button>
+   		<button type="submit" id="submit" class="submit btn btn-primary">Generate Form</button>
    		
     </form>
     
     <div id="response" style="display:none;"></div>
 
+</div>
 </div>
    
 <script>

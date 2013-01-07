@@ -1,9 +1,21 @@
+<?php /*IMPORTANT, LEAVE THIS HERE*/ $this->load->helper('ag_auth'); $username = username(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <title>Campus Linc Registration</title>
     <link rel="stylesheet" href="<?=base_url()?>css/main.css" type="text/css" />
- <script src="http://campus.zoodleweb.com/assets/grocery_crud/js/jquery-1.8.2.min.js"></script>
+    
+    <!-- new bootstrap code-->
+ 
+    <!--bootstrap-->
+    <link href="<?=base_url()?>assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="<?=base_url()?>assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <!-- End new bootstrap code-->
+    
+<script src="<?=base_url()?>assets/grocery_crud/js/jquery-1.8.2.min.js"></script>
 
 <?php 
 if(isset($css_files)) { foreach($css_files as $file): ?>
@@ -48,6 +60,7 @@ a:hover
 	display:inline;
 	margin-left:10px;
 }
+.icon-white, .nav > .active > a > [class^="icon-"], .nav > .active > a > [class*=" icon-"], .dropdown-menu > li > a:hover > [class^="icon-"], .dropdown-menu > li > a:hover > [class*=" icon-"], .dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*=" icon-"] {background-image: url("<?=base_url()?>img/glyphicons-halflings-white.png") !important;}
 </style>
 <script type="text/javascript">
  $(document).ready(function() {
@@ -75,57 +88,123 @@ function addStudentPopup(url) {
 </head>
 <body>
 
-<!-- Beginning header -->
 
-<div id="header">
-	
-	<div id="title">
-		<h1>Campus Linc WebApp</h1>
-	</div>
-	
-	
-    <div id="nav">
+<!--Navigation-->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand" href="/">
+                    <img src="/assets/app/img/logo.png" height="45" alt="logo" id="logo" class="hidden-phone" /></a>
+                <ul id="primary-nav" class="nav">
+                    <li><a href="/checkin"><i class="nav-icon-9"></i><span>Dashboard</span></a></li>
+                    <li class="dropdown"><a href="/classschedule" data-toggle="dropdown"><i class="nav-icon-14"></i><span>
+                        Courses</span></a>
+                        
+                    </li>
+                     <li class="dropdown"><a href="/company" data-toggle="dropdown"><i class="nav-icon-8"></i><span>
+                        Company</span></a>
+                        
+                    </li>
+                    <li><a href="/billing"><i class="nav-icon-12"></i><span>Billing</span></a></li>
+                    <li class="dropdown"><a href="/student" data-toggle="dropdown"><i class="nav-icon-5"></i><span>
+                        Student</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="slideshow.html"><i class="icon-play-circle"></i>&nbsp;Fullscreen Slideshow</a></li>
+                            <li><a href="/register"><i class="icon-picture"></i>&nbsp;Register</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/enrollment"><i class="nav-icon-10"></i><span>Register</span></a></li>
+                     <li><a href="/reports"><i class="nav-icon-1"></i><span>Reports</span></a></li>
+                      <li><a href="/invoice"><i class="nav-icon-7"></i><span>Invoicing</span></a></li>
+                </ul>
+                
+                <ul id="secondary-nav" class="visible-desktop nav pull-right">
+                    <li><a style="color:#3fa0ee;" data-toggle="modal" href="#myModal"><i class="icon-user icon-white"></i>&nbsp;Hello, <strong><?php if(isset($username)) { echo $username; } ?></strong></a></li>
+                    <li class="dropdown"><a style="color:#3fa0ee;" href="/admin/users/manage" data-toggle="dropdown"><i class="icon-cog icon-white">
+                    </i><span>Settings</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="icon-wrench"></i>&nbsp;Site Config</a></li>
+                            <li><a href="#"><i class="icon-picture"></i>&nbsp;Themes</a></li>
+                        </ul>
+                    </li>
+                    <li><a style="color:#3fa0ee;" href="/logout"><i class="icon-off icon-white"></i>&nbsp;Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    <!--</div>-->
     
-    	<div class="secondary-nav">
-		
-			<ul class="secondary-nav">
-		
-				<li><a href="http://campus.zoodleweb.com/reports"><span class="icon"><img src="<?=base_url()?>images/reports.png" alt="Reports" /></span>Reports</a></li>
-				<li><a href="http://campus.zoodleweb.com/invoice"><span class="icon"><img src="<?=base_url()?>images/invoicing.png" alt="Invoicing" /></span>Invoicing</a></li>
-				<li><a href="http://campus.zoodleweb.com/admin/users/manage"><span class="icon"><img src="<?=base_url()?>images/dashboard.png" alt="Dashboard" /></span>Dashboard</a></li>
-			
-			</ul>
-		
-		</div><!-- /secondary-nav -->
-    	
-    	<div class="separator"></div>
-    	
-    	<div class="main-nav">   		
-    		
-    		<ul class="main-nav">
-    	
-    			<li><a href="http://campus.zoodleweb.com/checkin"><span class="icon"><img src="<?=base_url()?>images/check-in.png" alt="Check In" /></span>Check-In</a></li>
-    			<li><a href="http://campus.zoodleweb.com/enrollment"><span class="icon"><img src="<?=base_url()?>images/register.png" alt="Register" /></span>Register</a></li>
-    			<li><a href="http://campus.zoodleweb.com/company/"><span class="icon"><img src="<?=base_url()?>images/companies.png" alt="Companies" /></span>Companies</a></li>
-    			<li><a href="http://campus.zoodleweb.com/billing/"><span class="icon"><img src="<?=base_url()?>images/billing.png" alt="Billing" /></span>Billing</a></li>
-    			<li><a href="http://campus.zoodleweb.com/student/"><span class="icon"><img src="<?=base_url()?>images/students.png" alt="Students" /></span>Students</a></li>
-				<li><a href="http://campus.zoodleweb.com/classschedule"><span class="icon"><img src="<?=base_url()?>images/courses.png" alt="Courses" /></span>Courses</a></li>
-			
-			</ul>
-		
-		</div><!-- /main-nav -->
-		
-		
-		<!--<ul>
-		
-			<li><a href="http://campus.zoodleweb.com/classtitles/index">Course Titles</a></li>
-			<li><a href="http://campus.zoodleweb.com/salesrep/">Sales Reps</a></li>
-			<li><a href="http://campus.zoodleweb.com/billing">Billing contact</a></li>
-			
-		</ul>-->
- 
+   
+    <!--Profile Form-->
+    <div class="modal hide fade" id="myModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                ×</button>
+            <h3>
+                Profile</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+            <legend>Contact Info</legend>
+            <div class="control-group">
+                <label class="control-label" for="txtContactName">
+                    Name</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input class="span4" id="txtContactName" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="txtPhone">
+                    Phone</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-comment"></i></span>
+                        <input class="span4" id="txtPhone" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="txtEmail">
+                    E-mail</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input class="span4" id="txtEmail" type="text">
+                    </div>
+                </div>
+            </div>
+            <legend>Security Info</legend>
+            <div class="control-group">
+                <label class="control-label" for="txtLoginID">
+                    Login ID</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input class="span4" id="txtLoginID" type="text" value="admin" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="txtPassword">
+                    Password
+                </label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i></span>
+                        <input class="span4" id="txtPassword" type="password">
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a> <a href="#"
+                class="btn" data-dismiss="modal">Cancel</a>
+        </div>
     </div>
-
-</div>
-
-<!-- End of header-->
+    </div>
+    <!--end of nav and header-->
+    <!--start of content-->
+<div class="container-fluid">

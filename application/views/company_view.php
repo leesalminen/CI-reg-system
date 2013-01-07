@@ -1,8 +1,5 @@
-	<div id="banner-bar">
-		<h2>Companies</h2>
-	</div>
-    <div style='height:20px;'></div>  
-    <div>
+
+    <div id="topspacegc">
         <?php echo $output; ?>
  
     </div>

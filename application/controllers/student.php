@@ -18,14 +18,14 @@ class Student extends Application {
  
    // $crud->set_theme('datatables');
     $crud->set_table('student');
-   $crud->set_theme('datatables');
+   //$crud->set_theme('datatables');
     $crud->set_subject('Student');
     
    
     $crud->set_relation('companyid','company','companyname');
     $crud->set_relation('billingid','billing','billingcontact');
     
-     $crud->required_fields(array('companyid','billingid','firstname','lastname','email'));
+     $crud->required_fields(array('companyid','billingid','firstname','lastname','email','telephone'));
     
     
   	$crud->display_as('companyid','Company');
@@ -62,6 +62,8 @@ class Student extends Application {
    	
    	
    	//load views
+   	$this->load->helper('ag_auth');
+   	$output->username = username();
    	$this->load->view('header',$output);
    	 $this->load->view('student_view', $output);
        	$this->load->view('footer');   	

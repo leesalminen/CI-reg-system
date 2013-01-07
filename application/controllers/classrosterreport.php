@@ -1,6 +1,6 @@
 <?php
 
-class Classrosterreport extends CI_Controller {
+class Classrosterreport extends Application {
 
 	
 	function __construct()
@@ -92,7 +92,7 @@ $row2 = $query2->row();
 
 		$this->table->set_heading('Full Name', 'Email', 'Company Name', 'Billing Contact',  'Attended?', 'Cancel?', 'No Show?');
 
-		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#checkIn{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#checkIn th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#checkIn td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#checkIn tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.png" /><h1>Campus Linc - Class Roster Report</h1><h3>Start Date: ' .date('m-d-Y',strtotime($date)). '  |  Length: ' .$query->row('duration'). ' Hours  |  Class: ' .$row2->classname. '  |  Instructor:  ' .$row2->instructor. '  |  Location:  ' .$row2->location. '  |  Cancelled?:  ' .$row2->cancelled. '</h3><table id="checkIn">', 'table_close' => '</table><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#checkIn{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#checkIn th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#checkIn td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#checkIn tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.jpg" /><h1>Campus Linc - Class Roster Report</h1><h3>Start Date: ' .date('m-d-Y',strtotime($date)). '  |  Length: ' .$query->row('duration'). ' Hours  |  Class: ' .$row2->classname. '  |  Instructor:  ' .$row2->instructor. '  |  Location:  ' .$row2->location. '  |  Cancelled?:  ' .$row2->cancelled. '</h3><table id="checkIn">', 'table_close' => '</table><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
 

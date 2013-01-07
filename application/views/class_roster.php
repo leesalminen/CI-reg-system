@@ -34,22 +34,32 @@ function cancelEnrollment(data) {
 	return false;
 }					
 </script>
-	<div id="banner-bar">
-		<h2>Class Roster  |  <a href="/classschedule">Back to Courses…</a></h2>
-	</div>
+<style type="text/css">
+@media print {
+	 #header{display:none;}
+  #nav{display:none;}
+  #banner-bar{display:none;}
+  .footer{display:none;}
+  #submit{display:none;}
+  #response2{display:none;}
+  #noPrint1{display:none;}
+  .navbar {display:none;}
 	
-    <div style='height:20px;'></div>  
-    <div>
+	
+}
+</style>
+    <div class="well">
     
-    <h1>Class Name: <?php echo $classname; ?></h1>
+    <h2>Class Name: <?php echo $classname; ?></h2>
     <h3>Class Date: <?php echo $startdate; ?></h3>
-    <h3>Length: <?php echo $length; ?></h3>
- 	<h3>Instructor: <?php echo $instructor; ?></h3>
-   	<h3>Laptops? <?php echo $laptops; ?></h3>
-   	<h3>Location: <?php echo $location; ?></h3>
+    <h4>Length: <?php echo $length; ?> | Instructor: <?php echo $instructor; ?> | Laptops? <?php echo $laptops; ?> | Location: <?php echo $location; ?></h4>
+   	
+    </div>
 
         <?php echo $output; ?>
      
      
      
-     <h2>Total # Of Students: <?php echo $numStudents; ?></h2>
+     <h3>Total # Of Students: <?php echo $numStudents; ?></h3>
+     
+      <div id="response2" class="alert alert-info"><b>Helpful Tip:</b> You can print this page directly without any headers/footers. Just hit Control+P to get a print preview !</div>

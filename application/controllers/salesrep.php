@@ -1,6 +1,6 @@
 <?php
 
-class Salesrep extends CI_Controller {
+class Salesrep extends Application {
 
 	
 	function __construct()
@@ -16,7 +16,6 @@ class Salesrep extends CI_Controller {
  
   
     $crud->set_table('salesperson');
-    $crud->set_theme('datatables');
     $crud->set_subject('Sales Rep');
 
 

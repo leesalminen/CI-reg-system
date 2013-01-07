@@ -20,7 +20,7 @@ class Classschedule extends Application {
 		 
    // $crud->set_theme('datatables');
     $crud->set_table('class_schedule');
-    $crud->set_theme('datatables');
+   // $crud->set_theme('datatables');
     $crud->set_subject('Dates');
   	
   	
@@ -42,7 +42,7 @@ class Classschedule extends Application {
   	
 // $crud->callback_column('startdate',array($this,'_callback_class_page'));
 
-    $crud->add_action('Roster', '', '/classschedule/classroster',array($this,'_callback_class_page'));
+    $crud->add_action('Roster', '/assets/grocery_crud/themes/flexigrid/css/images/magnifier.png', '/classschedule/classroster',array($this,'_callback_class_page'));
 
 	$crud->callback_add_field('startdate',array($this,'_add_default_date_value'));
 
@@ -115,13 +115,13 @@ $numRows = $query->num_rows();
 	  	if($row->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
 	   if($row->userCancel == '1') { $cancelled = 'Yes';} else { $cancelled = 'No'; }
 	   if($row->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
-	   $totalCost = money_format('$%i',$row->tuition + $row->courseware);
+	   $totalCost = money_format('$%i',$row->tuition);
 	      			$fullname = $row->firstname. ' ' .$row->lastname;
 	      			$this->table->add_row(array('<p style="text-align:center;margin:0;padding:0;"><a href="#" id="' .$row->id. '" onclick="cancelEnrollment(' .$row->id. ');return false;">Cancel Enrollment</a></p>',$fullname, $row->email,  $row->companyname, $row->billingcontact,$checkedIn, $cancelled, $noShow, $totalCost));
-	
+	      		$output['url'] = $row->url;
 	      		$output['classname'] = $row->classname;
 	      		$output['length'] = $row->duration. ' Hours';
-	      		$output['startdate'] = date('m-d-Y',strtotime($row->startdate));
+	      		$output['startdate'] = date('F j, Y - g:i a',strtotime($row->startdate));
 	      		$output['instructor'] = $row->instructor;
 	      		$output['laptops'] = $row->laptops;
 	      		$output['numStudents'] = $numRows;
@@ -144,7 +144,7 @@ $numRows = $query->num_rows();
 
 	   
 			} 	else {
-	   					$output['output'] = '<h1>No Students Enrolled For Course</h1><h3><a href="/classschedule">Click Here to Go Back</a></h3>';
+	   					$output['output'] = '<div class="alert alert-error">No Students Enrolled For Course. <a href="/classschedule">Click Here to Go Back</a></div>';
 	   					$this->load->view('header');
    						$this->load->view('class_roster_empty', $output);
    						$this->load->view('footer');

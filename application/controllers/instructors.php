@@ -1,6 +1,6 @@
 <?php
 
-class Instructors extends CI_Controller {
+class Instructors extends Application {
 
 	
 	function __construct()
@@ -14,9 +14,8 @@ class Instructors extends CI_Controller {
 	{
 		 $crud = new grocery_CRUD();
  
-   // $crud->set_theme('datatables');
+    //$crud->set_theme('datatables');
     $crud->set_table('instructors');
-    $crud->set_theme('datatables');
     $crud->set_subject('Instructor');
      
     
@@ -25,10 +24,9 @@ class Instructors extends CI_Controller {
  	   $crud->required_fields('instructor_name','status');
  	   
    	$output = $crud->render();
+
    	
-   	
-   	
-   	$this->load->view('header', $output);
+   	$this->load->view('header',$output);
     $this->load->view('instructors_view', $output);
    	$this->load->view('footer');
  		

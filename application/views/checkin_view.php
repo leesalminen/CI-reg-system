@@ -303,9 +303,18 @@ setInterval('checkForNewEnrollments()',100000);
  
 		
 </script>
-	<div id="banner-bar">
-		<h2>Check In … Shows Todays Classes Only</h2>
+<div class="row-fluid">
+	<div class="span9">
+	<h1>Welcome to the Dashboard</h1>
+		<!--<h1>Check In … Shows Todays Classes Only</h1>-->
 	</div>
+	<div class="span3">
+	<div class="label label-info">
+	<p style="margin-bottom:0;margin-left:20px;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></p>
+	</div>
+		<!--<h1>Check In … Shows Todays Classes Only</h1>-->
+	</div>
+</div>
     
  <!--   <p id="testingResponse"><a href="#" onclick="checkForNewEnrollments();">Click</a></p>
    <h2>Generate Check In Forms</h2>
@@ -332,15 +341,17 @@ $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
 
 <hr />
 -->
+
     <div>
     	<?php if(isset($numRows)) { ?> <input id="numRows" type="hidden" value="<?=$numRows;?>" /><?php } ?>
-       <h2 style="margin-bottom:0;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></h2>
-       <h4 style="margin-top:5px;">Logged In As: <?=$username;?>. Not <?=$username;?>? <a href="/logout">Logout</a></h4>
+      <!-- <p class="label label-info" style="margin-bottom:0;margin-left:20px;">Live Check In - <span id="clock"></span> - <?=date('m.d.Y');?></p>-->
+       <!--<h4 style="margin-top:5px;">Logged In As: <?=$username;?>. Not <?=$username;?>? <a href="/logout">Logout</a></h4>-->
        <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
        
        
-      <?php if(!isset($noRows)) { echo $table; } else { echo '<h1>No Active Enrollments for Today.</h1>'; } ?>
- 
+      <?php if(!isset($noRows)) { echo $table; } else { echo '<div class="alert span8"><h4>TAKE A VACATION!</h4>No classes scheduled with students today.</div>'; } ?>
+       
+    </div>
     </div>
   
 

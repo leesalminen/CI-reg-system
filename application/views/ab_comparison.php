@@ -36,16 +36,15 @@ $(document).ready(function(){
   #header{display:none;}
   #nav{display:none;}
   #banner-bar{display:none;}
-  #footer{display:none;}
+  .footer{display:none;}
   #submit{display:none;}
   #response2{display:none;}
+  #noPrint1{display:none;}
   
   }
 </style>
 
-	<div id="banner-bar">
-		<h2>A-B Course Comparison</h2>
-	</div>
+	
 	
     <div style='height:20px;'></div>  
     <h1>A-B Course Comparison</h1>
@@ -69,9 +68,9 @@ $(document).ready(function(){
     
     <br /><br />
     
-    <input type="submit" value="Search For Students" id="submit" />
+    <input type="submit" class="btn btn-primary" value="Search For Students" id="submit" />
     </form>
     <div id="response" style="display:none;"></div>
     
-    <div id="response2" style="display:none"><p style="font-weight:bold;">Helpful Tip: You can print this page directly without any headers/footers. Just hit Control+P to get a print preview !</p></div>
+    <div id="response2" style="display:none" class="alert alert-info"><p style="font-weight:bold;">Helpful Tip: You can print this page directly without any headers/footers. Just hit Control+P to get a print preview !</p></div>
  	

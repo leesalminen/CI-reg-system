@@ -71,7 +71,7 @@ class Billing extends Application {
                 
    // $crud->set_theme('datatables');
     $crud->set_table('billing');
-    $crud->set_theme('datatables');
+   // $crud->set_theme('datatables');
     $crud->set_subject('Billing Contact');
  
     $crud->set_relation('companyid','company','companyname');
@@ -83,6 +83,10 @@ class Billing extends Application {
  	$crud->display_as('billingaddress2','Billing Address 2');
  	$crud->display_as('billingcity','Billing City');
  	$crud->display_as('billingstate','Billing State');
+ 	 	$crud->display_as('billingzip','Billing Zip Code');
+ 	 	 	$crud->display_as('billingemail','Billing Email');
+
+
  //	$crud->display_as('billingzip','Billing Zip');
  	
  	$crud->field_type('billingstate','dropdown',$state_list);

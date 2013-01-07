@@ -29,11 +29,17 @@
 if($success_message !== null){?>
 	<p><?php echo $success_message; ?></p>
 <?php }
-?></div>	
+?>
+</div>	
+
 <div class="flexigrid" style='width: 100%;'>
+
 	<div class="mDiv">
+
+	
+	
 		<div class="ftitle">
-			&nbsp;
+			<?php if(strtolower($subject) != 'record'): echo $subject; else: echo '&nbsp;'; endif; ?>
 		</div>
 		<div title="<?php echo $this->l('minimize_maximize');?>" class="ptogtitle">
 			<span></span>

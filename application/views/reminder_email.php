@@ -66,38 +66,39 @@ $(".checkbox").each( function() {
 </script>
 
 
-
-<div style='height:20px;'></div> 
-
 <div>
 <h1>Student Reminder Emails</h1>
 <p>Send Student Reminder Emails for enrollments by date range.</p>
-<h3>This WILL NOT SHOW students that indicated they did not want to receive emails at enrollment.</h3>
-<h3>This WILL NOT SHOW students that have already been sent a reminder email.</h3>
+<div class="alert span12"><p><b>Notice! </b>This WILL NOT SHOW students that indicated they did not want to receive emails at enrollment. This WILL NOT SHOW students that have already been sent a reminder email.</p>
+</div>
+<div class="span12">
   <form method="post" action="/reminderemail/getEnrollments" id="unBilledEnrollments" name="unBilledEnrollments">
   		
   	  		
   		<div id="dates">	
-    	<label for="datepickerFrom">From Date</label> 
+    	<label for="datepickerFrom"><b>From Date</b></label> 
     	
     	<input type="text" id="datepickerFrom" class="datepicker" name="datepickerFrom" placeholder="Choose From Date" value="<?php echo date('Y-m-d'); ?>" /> (Required)
    		
    		<br />
    		
-   		<label for="datepickerTo">To Date</label>&nbsp; &nbsp;&nbsp;
+   		<label for="datepickerTo"><b>To Date</b></label>
    	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
 		
 		<br /><br />
 		</div>
-   		<button type="submit" id="submit" class="submit">Show Enrollments</button>
+   		<button type="submit" id="submit" class="btn btn-primary">Show Enrollments</button>
    		
     </form>
+</div>
+
+<div class="clear" style="clear:both;min-height:10px;">&nbsp;</div>
     
     <p style="display:none;" id="selectAllP"><a href="#" id="selectAll" onclick="selectAllCheckbox();return false;">Select All</a>  |  <a href="#" id="unSelectAll" onclick="unSelectAllCheckbox(); return false;">UnSelect All</a></p>
     <div id="response" style="display:none;"></div>
     
     
-        <div id="createContainer" style="display:none;"><br /><br /><button type="submit" id="createInvoice" name="createInvoice" value="submit">Email Reminder to Student</button></div>
+        <div id="createContainer" style="display:none;"><br /><br /><button type="submit" id="createInvoice" name="createInvoice" class="btn btn-primary" value="submit">Email Reminder to Student</button></div>
 
     
 </div>

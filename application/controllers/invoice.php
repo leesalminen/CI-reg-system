@@ -52,11 +52,12 @@ class Invoice extends Application {
 		 $crud->where('invoiceStatus',null);
 		//$crud->where(array('invoiceStatus'=>null,'invoiceStatus'=>'Uninvoiced'));		 
 		 $crud->set_table('enrollment');
-		 $crud->set_theme('datatables');
+		// $crud->set_theme('datatables');
    	     $crud->set_subject('Unbilled Enrollments');
    	 $name = 'firstname' . 'lastname';
    	  $crud->unset_add();
             $crud->unset_edit();
+            $crud->unset_delete();
     $crud->set_relation('companyid','company','companyname');
     $crud->set_relation('studentid','student','{firstname} {lastname}');
     $crud->set_relation('billingid','billing', 'billingcontact');
@@ -71,6 +72,7 @@ class Invoice extends Application {
  	$crud->display_as('classid','Class Name');
  	$crud->display_as('datesid','Class Date');
  	$crud->display_as('po','Purchase Order #');
+ 	$crud->display_as('regType','Registration Type');
 
 
 
@@ -79,11 +81,7 @@ class Invoice extends Application {
 		
 		 $output = $crud->render();
 
-		
-		
-		$array['js_files'] = array('//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js','/css/jquery.pnotify.min.js');
-		$array['css_files'] = array('http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css','/css/jquery.pnotify.default.css','/css/jquery.pnotify.default.icons.css');
-		
+				
 		$this->load->view('header',$output);
    	    $this->load->view('unbilled_enrollments',$output);
 		$this->load->view('footer');
@@ -178,7 +176,7 @@ class Invoice extends Application {
 	$this->load->library('table');
 
 	
-	$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_titles.length,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow,enrollment.id as enrollmentid FROM enrollment
+	$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.duration,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.checkedIn,enrollment.noshow,enrollment.id as enrollmentid FROM enrollment
 LEFT JOIN student as student on student.id = enrollment.studentid
 LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
@@ -187,6 +185,7 @@ WHERE startdate >= \"" .$fromDate. "%\"
 AND enddate <= \"" .$toDate. "%\"
 AND invoiceStatus is NULL
 AND enrollment.billingid = \"" .$billingcontact. "\"
+ORDER BY lastname
 ";
 
 	$query = $this->db->query($sql);
@@ -208,10 +207,10 @@ AND enrollment.billingid = \"" .$billingcontact. "\"
 		
 		if($row->checkedIn == '1') { $checkedIn = 'Yes'; } else { $checkedIn = 'No'; }
 	  	if($row->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
-	    $fullname = $row->firstname. ' ' .$row->lastname;
+	    $fullname = $row->lastname. ', ' .$row->firstname;
 	    $totalCost = $row->tuition;
 	    
-	    $this->table->add_row('<input type="checkbox" id="checkbox' .$row->enrollmentid. '" value="' .$row->enrollmentid. '" name="checkbox' .$row->enrollmentid. '" class="checkbox" />',$fullname, $row->classname, $totalCost, date('m-d-Y',strtotime($row->startdate)), $row->length, $checkedIn, $noShow);
+	    $this->table->add_row('<input type="checkbox" id="checkbox' .$row->enrollmentid. '" value="' .$row->enrollmentid. '" name="checkbox' .$row->enrollmentid. '" class="checkbox" />',$fullname, $row->classname, "$" .$totalCost, date('m-d-Y',strtotime($row->startdate)), $row->duration. " Hours", $checkedIn, $noShow);
 	    
 	}
 	
@@ -427,7 +426,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('dejavusans', '', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 // add a page
 $pdf->AddPage();
@@ -556,7 +555,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('dejavusans', '', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 // add a page
 $pdf->AddPage();
@@ -713,7 +712,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('dejavusans', '', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 // add a page
 $pdf->AddPage();
@@ -723,9 +722,8 @@ $pdf->Output($fileName, 'F');
 
 $this->load->library('email');
 
-$this->email->from('invoices@campuslinc.com', 'Campus Linc');
+$this->email->from('shaune@campuslinc.com', 'Campus Linc');
 $this->email->to($array[0]->billingemail); 
-$this->email->cc('me@leesalminen.com');
 $this->email->bcc('shaune@campuslinc.com'); 
 $this->email->subject('A new invoice has been issued from Campus Linc.');
 $this->email->message("Dear " .$array[0]->billingcontact. ",\nAttached you will find an itemized invoice for Campus Linc. If you have any questions, please feel free to contact us at 716-688-8688.");	
@@ -887,7 +885,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('dejavusans', '', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 // add a page
 $pdf->AddPage();
@@ -897,9 +895,8 @@ $pdf->Output($fileName, 'F');
 
 $this->load->library('email');
 
-$this->email->from('invoices@campuslinc.com', 'Campus Linc');
+$this->email->from('shaune@campuslinc.com', 'Campus Linc');
 $this->email->to($array[0]->billingemail); 
-$this->email->cc('me@leesalminen.com');
 $this->email->bcc('shaune@campuslinc.com'); 
 $this->email->subject('A new invoice has been issued from Campus Linc.');
 $this->email->message("Dear " .$array[0]->billingcontact. ",\nAttached you will find an itemized invoice for Campus Linc. If you have any questions, please feel free to contact us at 716-688-8688.");	
@@ -982,7 +979,6 @@ if($this->email->send()) {
 	$sql = "SELECT invoices.id as invoiceid, company.companyname, billing.billingcontact,invoices.status FROM invoices LEFT JOIN billing as billing on billing.id = invoices.billingID LEFT JOIN company as company on company.id = billing.companyid WHERE status != \"Paid\"
 AND createdAt <= \"" .$filter. "\"	
 ";
-
 	
 		$query = $this->db->query($sql);
 		
@@ -1055,7 +1051,7 @@ AND createdAt <= \"" .$filter. "\"
 	  		 $crud = new grocery_CRUD();
 		 $crud->set_model('paid_invoices');    
 		 $crud->set_table('invoices');
-		 $crud->set_theme('datatables');
+		 //$crud->set_theme('datatables');
    	     $crud->set_subject('Paid Invoices');
    	 	 $crud->unset_add();
          $crud->unset_edit();
@@ -1072,8 +1068,8 @@ AND createdAt <= \"" .$filter. "\"
 				$crud->display_as('invoiceTotal','Invoice Total');
 				$crud->display_as('id','Invoice ID');
 
-		$crud->add_action('View/Print Invoice', '', '/invoice/printPaidInvoice',array($this,'_callback_class_page'));
-		$crud->add_action('Email Invoice', '', '/invoice/sendPaidInvoice',array($this,'_callback_class_page'));
+		$crud->add_action('View/Print Invoice', '/assets/grocery_crud/themes/flexigrid/css/images/print.png', '/invoice/printPaidInvoice',array($this,'_callback_class_page'));
+		$crud->add_action('Email Invoice', '/assets/grocery_crud/themes/flexigrid/css/images/email.png', '/invoice/sendPaidInvoice',array($this,'_callback_class_page'));
   $crud->callback_column('invoiceTotal',array($this,'_get_invoice_total'));
 
 		
@@ -1100,7 +1096,6 @@ AND createdAt <= \"" .$filter. "\"
 	  
 	  
 	  }
-
 
 public function markAsSent() {
 	$this->load->database();
