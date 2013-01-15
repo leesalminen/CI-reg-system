@@ -1,7 +1,3 @@
-<div class="row">
-    <div class="alert span3">Cancellations? <a href="/cancellations">Click Here</a>.
- </div>
-</div>
     <div id="topspacegc">
     
 

@@ -3,7 +3,7 @@
 <div id="reports"  class="row"> <!--row 1-->
 
  <div  class="span6">
- <div class="alert" style="height:100px;">
+ <div class="alert" style="height:120px;">
  	<h4><i class="icon-home"></i> Facilities</h4>
  	<ul>
  		<li>
@@ -21,7 +21,7 @@
  </div>
  
   <div class="span6">
-   <div class="alert" style="height:100px;">
+   <div class="alert" style="height:120px;">
   	<h4><i class="icon-calendar"></i> Courses</h4>
   	<ul>
   		<li>
@@ -39,7 +39,7 @@
     
     
   <div class="span6">
-   <div class="alert" style="height:100px;">
+   <div class="alert" style="height:120px;">
 
     	<h4><i class="icon-user"></i> Student</h4>
   	<ul>
@@ -50,7 +50,13 @@
        		<a href="/aBComparison">Students Took Class A, But NOT Class B Report</a>
        	</li>
        		<li>
-       		<a href=""></a>
+       		<a href="/studenttranscript">Individual Student Transcript Report</a>
+       	</li>
+       		<li>
+       		<a href="/previousEnrollment/index/add">Enroll Students in Past Courses</a>
+       	</li>
+       	<li>
+       		<a href="/cancellations">Cancellations</a>
        	</li>
     </ul>
     </div>
@@ -61,7 +67,7 @@
   
    <!--row 2-->
   
-  <div class="row" id="reports" style="height:100px;"> 
+  <div class="row" id="reports" style="height:120px;"> 
  
   
   
@@ -85,7 +91,7 @@
   </div>
   
    <div class="span6">
-    <div class="alert" style="height:100px;">
+    <div class="alert" style="height:120px;">
   	<h4><i class="icon-th"></i> Accounting</h4>
   	<ul>
   		<li>
@@ -103,7 +109,7 @@
   </div>
   
    <div class="span6">
-    <div class="alert" style="height:100px;">
+    <div class="alert" style="height:120px;">
   	<h4><i class="icon-star-empty"></i> Sales</h4>
   	<ul>
   		<li>

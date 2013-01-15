@@ -120,7 +120,7 @@ class Studenttranscript extends Application {
 		
 		$sql = "SELECT * 
 FROM enrollment
-LEFT JOIN class_schedule ON ( enrollment.classid = class_schedule.classtitleid ) 
+LEFT JOIN class_schedule ON ( enrollment.datesid = class_schedule.id ) 
 LEFT JOIN class_titles ON ( enrollment.classid = class_titles.id ) 
 LEFT JOIN student ON (enrollment.studentid = student.id)
 WHERE enrollment.companyid = '" .$company. "'
@@ -146,7 +146,7 @@ $companyName = $result->row();
 		$today = date('m-d-Y');
 		$this->table->set_heading('Class Name', 'Start Date', 'End Date', 'Attended?', 'Cancelled?', 'No Show?');
 
-		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><img src="../images/logo.png" /><h2>Student Transcript Report For: ' .$fullName. ' | Company: ' .$companyName->companyname. '</h2><h4>This report was generated on: ' .$today. '</h4><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
+		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:250px;margin:0 auto;"><img src="../images/logo.jpg" /><h2>Student Transcript Report For: ' .$fullName. ' | Company: ' .$companyName->companyname. '</h2><h4>This report was generated on: ' .$today. '</h4><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
 		   

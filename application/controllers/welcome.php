@@ -29,8 +29,14 @@ class Welcome extends Application {
 	
 	public function index()
 	{
-
+		if(logged_in()) {
+			
+			redirect('/checkin', 'location', 301);
+			
+		} else {
+		
 		$this->login();
+		}
 	}
 }
 

@@ -40,8 +40,12 @@ class Reminderemail extends Application {
 	$fromDate = $_POST['datepickerFrom'];
 	if($_POST['datepickerTo'] != '') {
 		$toDate = $_POST['datepickerTo'];
+		//$toDate = strtotime('-1 Day',$toDate);
+
 	} else {
-		$toDate = '2050-12-31';
+		$toDate = '2050-06-02';
+		//$toDate = strtotime('-1 Day',$toDate);
+
 	}
 	
 	$this->load->database();
@@ -53,13 +57,18 @@ LEFT JOIN student as student on student.id = enrollment.studentid
 LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 LEFT JOIN billing as billing on billing.id = enrollment.billingid
-WHERE startdate >= \"" .$fromDate. "%\"
-AND enddate <= \"" .$toDate. "%\"
+WHERE startdate >= \"" .$fromDate. " 23:00:00\"
+AND startdate <= \"" .$toDate. " 23:00:00\"
 AND emailStudent = '1'
 AND userCancel = '0'
 AND enrollment.reminderEmailSent = '0'
-ORDER BY classname,lastname
+ORDER BY startdate asc,classname asc
 ";
+
+
+//echo json_encode($sql);
+//exit;
+
 
 	$query = $this->db->query($sql);
 	

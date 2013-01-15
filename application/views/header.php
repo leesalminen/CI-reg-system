@@ -67,12 +67,13 @@ a:hover
 
 	$("#billingid_input_box").append('<div id="addNewBillingID"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>billing/index/add?popup=1\')">New Billing Contact</a></div>'); 
 
-	$("#classtitleid_input_box").append('<div id="addNewClassTitle"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>classtitles/index/add?popup=1\')">New Class Title</a></div>'); 
+//	$("#classtitleid_input_box").append('<div id="addNewClassTitle"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>classtitles/index/add?popup=1\')">New Class Title</a></div>'); 
 
 $("#studentid_input_box").append('<div id="addNewStudent"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>student/index/add?popup=1\')">New Student</a></div>'); 
 
 $("#instructor_input_box").append('<div id="addNewInstructor"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>instructors/index/add?popup=1\')">New Instructor</a></div>'); 
 
+$("#field-telephone").attr('pattern','^[1-9]{2}[0-9]{8}$');
 
 
 

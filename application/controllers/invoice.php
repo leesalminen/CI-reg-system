@@ -1078,7 +1078,7 @@ AND createdAt <= \"" .$filter. "\"
 		
 		 $output = $crud->render();
 
-		
+
 
 		$this->load->view('header',$output);
    	    $this->load->view('paid_invoices',$output);

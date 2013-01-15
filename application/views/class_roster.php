@@ -50,10 +50,11 @@ function cancelEnrollment(data) {
 </style>
     <div class="well">
     
-    <h2>Class Name: <?php echo $classname; ?></h2>
-    <h3>Class Date: <?php echo $startdate; ?></h3>
-    <h4>Length: <?php echo $length; ?> | Instructor: <?php echo $instructor; ?> | Laptops? <?php echo $laptops; ?> | Location: <?php echo $location; ?></h4>
-   	
+    <h3>Class Name: <a href="<?php echo $url; ?>" target="_blank" style="font-size:inherit;"><?php echo $classname; ?></a></h3>
+    <h4>Class Start Date: <?php echo $startdate; ?> | Class End Date: <?php echo $enddate; ?></h4>
+    <h4>Duration: <?php echo $length; ?> | Instructor: <?php echo $instructor; ?> | Location: <?php echo $location; ?> | Type: <?php echo $classType; ?></h4>
+    <h4>Laptops? <?php echo $laptops;  if (isset($numLaptops)) {   ?> | How Many Laptops? <?php echo $numLaptops; } ?></h4>
+   	<p><b>Notes: </b><?php echo $notes; ?></p>
     </div>
 
         <?php echo $output; ?>
@@ -61,5 +62,6 @@ function cancelEnrollment(data) {
      
      
      <h3>Total # Of Students: <?php echo $numStudents; ?></h3>
+      <h4>Gross Revenue: <?php echo $grossCost; ?> | Gross Courseware: <?php echo $grossCourseware; ?> | Net Revenue: <?php echo $netRevenue; ?></h4>
      
       <div id="response2" class="alert alert-info"><b>Helpful Tip:</b> You can print this page directly without any headers/footers. Just hit Control+P to get a print preview !</div>

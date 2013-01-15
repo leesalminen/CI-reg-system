@@ -61,13 +61,13 @@ class Cancellations extends Application {
 LEFT JOIN student as student on student.id = enrollment.studentid
 LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 LEFT JOIN company as company on company.id = enrollment.companyid
-WHERE startdate >= \"" .$date. "\"
-AND classid = \"" .$course. "\"
+WHERE class_schedule.id = \"" .$course. "\"
 AND userCancel = '0'
 AND checkedIn = '0'
 AND noshow = '0'
 ORDER BY lastname
 ";
+
 
 	$query = $this->db->query($sql);
 	

@@ -55,8 +55,12 @@ p {
 </head>
 <body>
 	<div id="container">
-		<h1><?php echo $heading; ?></h1>
-		<?php echo $message; ?>
+		<!-- <h1><?php echo $heading; ?></h1>
+		<?php echo $message; ?> -->
+		
+		<h1>Oops!</h1>
+		<p>This page does not exist. <a href="/">Please click here</a> to go back to the dashboard.</p>
+		
 	</div>
 </body>
 </html>

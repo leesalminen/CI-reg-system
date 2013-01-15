@@ -68,8 +68,7 @@ class Reports extends Application {
 	//	$this->load->library('Pdf');
 		$this->load->database();
 		
-$sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor, class_titles.classname FROM `class_schedule` LEFT JOIN `class_titles` as class_titles ON `class_titles`.`id` = `class_schedule`.`classtitleid`  WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\' AND `cancelled` = \'NO\' ORDER BY startdate';
-
+$sql = 'select class_schedule.id as datesid, class_schedule.classtitleid,class_schedule.startdate,class_schedule.notes,class_schedule.location,class_schedule.instructor,class_titles.classname FROM class_schedule LEFT JOIN class_titles as class_titles ON class_titles.id = class_schedule.classtitleid WHERE `startdate` >= \'' .$from. '\' AND `startdate` <= \'' .$to. '\' AND `cancelled` = \'NO\' ORDER BY startdate'; 
 			
 		$query = $this->db->query($sql);
 		$array = array();
@@ -78,40 +77,24 @@ $sql = 'SELECT class_schedule.id,class_schedule.classtitleid, class_schedule.sta
 			$array[] = $row;
 		
 		
-		}	
-		
-		foreach($array as $classtitleid){
-			$sql2 = 'SELECT id,classid,datesid FROM `enrollment` WHERE `classid` = \'' .$classtitleid->classtitleid. '\' AND `status` = \'1\'';
-			$query2 = $this->db->query($sql2);
-			
-			
-			foreach($query2->result() as $row){
-				//$array2[]=$row;
-				$numRows = $query2->num_rows();
-				$array2[$row->classid] = $numRows;
-				
-			}
-						
-			
-		
 		}
-				
-	//	print_r($array);
-		//print_r($array2);
 		
-		$numberOfClasses = $query->num_rows();
+			$numberOfClasses = $query->num_rows();
 		$today = date('m-d-Y');
 		$this->table->set_heading('Class Name', 'Start Date', 'Location', 'Instructor', 'Notes', '# of Students');
 
 		$tmpl = array ( 'table_open'  => '<html><head><style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:100%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style></head><body><div style="width:100%;height:100%;"><div style="width:100%;height:375px;margin:0 auto;"><img src="../images/logo.jpg" /><h1>Upcoming Classes Report</h1><h3>This report was generated on: ' .$today. '</h3><table id="upcomingClasses">', 'table_close' => '</table><h4>Total # of Classes: ' .$numberOfClasses. '</h4><p style="font-size:10px;">Campus Linc, Inc.<br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688</p></div></body></html>' );
 
 		$this->table->set_template($tmpl);
-		   
-	   foreach($array as $arr)
-	   {
+		
+		foreach($array as $arr){
+			$sql2 = 'SELECT id from enrollment where datesid = \'' .$arr->datesid. '\'';
+			
+			
+			$query2 = $this->db->query($sql2);
+			$num[$arr->datesid] = $query2->num_rows();
 
-	   $classID = $arr->classtitleid;
-	   @$value = $array2[$classID];
+	   $value = $num[$arr->datesid];
 	   $this->table->add_row(array($arr->classname, date('m-d-Y H:i:s',strtotime($arr->startdate)),  $arr->location, $arr->instructor, $arr->notes, $value));
 	   
 	   $classID = '';

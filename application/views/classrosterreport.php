@@ -14,16 +14,11 @@ $(document).ready(function(){
 				data: post_data,
 				dataType: "json",
 				success: function(msg) {
-					if(msg == '<option value="null">No Classes Scheduled</option>'){
-						$("#courses").find('option').remove();
-						$("#courses").append(msg).show();
-						$("#submit").hide();
-
-					} else {
+						//res = $.parseJSON(msg);
 						$("#courses").find('option').remove();
 						$("#courses").append(msg).show();
 						$("#submit").show();
-					}					
+										
 				}
 			});
 		return false;

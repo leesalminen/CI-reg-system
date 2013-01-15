@@ -25,7 +25,7 @@
 
 <?php } ?>
 <div class="alert alert-info">
-<span style="text-align:center;">Click the magnifying class next to any class to view Class Roster!</span>
+<span style="text-align:center;">Click the magnifying glass next to any class to view Class Roster!</span>
 </div>
 
 

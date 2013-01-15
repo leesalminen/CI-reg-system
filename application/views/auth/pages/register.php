@@ -1,4 +1,4 @@
-<div id="login">
+<div>
 	
 	<?php if(empty($username)) { ?>
 	<h2>Register</h2>

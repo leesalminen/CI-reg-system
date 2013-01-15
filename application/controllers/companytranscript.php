@@ -129,7 +129,7 @@ class Companytranscript extends Application {
 		
 		$sql = "SELECT enrollment.companyid,enrollment.studentid,enrollment.billingid,enrollment.classid,enrollment.datesid,enrollment.checkedIn,enrollment.userCancel,enrollment.noshow,enrollment.regType,class_schedule.startdate,class_schedule.enddate,enrollment.tuition,enrollment.courseware,class_titles.classname,student.billingid,student.firstname,student.lastname,billing.billingcontact
 FROM enrollment
-LEFT JOIN class_schedule ON ( enrollment.classid = class_schedule.classtitleid ) 
+LEFT JOIN class_schedule ON ( enrollment.datesid = class_schedule.id ) 
 LEFT JOIN class_titles ON ( enrollment.classid = class_titles.id ) 
 LEFT JOIN student ON (enrollment.studentid = student.id)
 LEFT JOIN billing ON ( enrollment.billingid = billing.id )
@@ -241,7 +241,7 @@ exit;
 		
 		$sql = "SELECT enrollment.companyid,enrollment.studentid,enrollment.billingid,enrollment.classid,enrollment.datesid,enrollment.checkedIn,enrollment.userCancel,enrollment.noshow,class_schedule.startdate,class_schedule.enddate,class_titles.classname,student.billingid,student.firstname,student.lastname
 FROM enrollment
-LEFT JOIN class_schedule ON ( enrollment.classid = class_schedule.classtitleid ) 
+LEFT JOIN class_schedule ON ( enrollment.datesid = class_schedule.id ) 
 LEFT JOIN class_titles ON ( enrollment.classid = class_titles.id ) 
 LEFT JOIN student ON (enrollment.studentid = student.id)
 WHERE enrollment.companyid = '" .$company. "'

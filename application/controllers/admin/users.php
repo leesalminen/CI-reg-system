@@ -14,12 +14,21 @@ class Users extends Application
 	    $this->load->library('table');		
 			
 		$data = $this->db->get($this->ag_auth->config['auth_user_table']);
+		
+				$tmpl = array ( 'table_open'  => '<style type="text/css">body{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;}#upcomingClasses{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:12px;background:#fff;width:50%;border-collapse:collapse;text-align:left;}#upcomingClasses th{font-size:14px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;}#upcomingClasses td{border-left:1px solid #ccc; border-right:1px solid #ccc;border-bottom:1px solid #ccc;color:#669;padding:6px 8px;}#upcomingClasses tbody tr:hover td{color:#009;}.signature{width:250px;}.largeCheckBox{width:25px;height:25px;margin:0 auto;}</style><table id="upcomingClasses">', 'table_close' => '</table>' );
+				
+						$this->table->set_template($tmpl);
+
+
 		$result = $data->result_array();
 		$this->table->set_heading('Username', 'Email', 'Actions'); // Setting headings for the table
 		
 		foreach($result as $value => $key)
 		{
-			$actions = anchor("admin/users/delete/".$key['id']."/", "Delete"); // Build actions links
+			//CUSTOM FOR CAMPUS LINC
+			if($key['id'] === '1' || $key['id'] === '12') { $actions = ''; } else {
+			$actions = anchor("admin/users/delete/".$key['id']."/", "Delete"); // Build actions links	
+			}
 			$this->table->add_row($key['username'], $key['email'], $actions); // Adding row to table
 		}
 		
