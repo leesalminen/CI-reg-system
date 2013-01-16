@@ -46,6 +46,7 @@ $route['login'] = "admin/admin/login";
 $route['logout'] = "admin/admin/logout";
 $route['register'] = "admin/admin/register";
 $route['admin/dashboard'] = "admin/admin/index";
+$route['admin'] = "admin/users/manage";
 // END AUTHENTICATION LIBRARY ROUTES
 
 
