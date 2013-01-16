@@ -34,9 +34,27 @@ if($success_message !== null){?>
 
 <div class="flexigrid" style='width: 100%;'>
 
-	<div class="mDiv">
+<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form_top" autocomplete = "off" style="margin:0;"'); ?>	
+	<div class="sDiv" id='quickSearchBoxTop'>
+		<div class="sDiv2">
+			<input type="text" class="qsbsearch_fieldox" name="search_text" placeholder="Search" size="30" id='search_text'>
+			<select name="search_field" id="search_field">
+				<option value=""><?php echo $this->l('list_search_all');?></option>
+				<?php foreach($columns as $column){ if($column->field_name === 's82c616a8') { ?>
+					<option value="<?php echo $column->field_name?>" selected><?php echo $column->display_as?>&nbsp;&nbsp;</option>
+				<?php } else { ?>
+				<option value="<?php echo $column->field_name?>"><?php echo $column->display_as?>&nbsp;&nbsp;</option>
+				<?php } }?>
+			</select>
+            <input type="button" value="<?php echo $this->l('list_search');?>" id='crud_search' style="margin-top:-7px;" class="btn btn-primary"> 
+		</div>
+        <div class='search-div-clear-button'>
+            <button type="button" value="<?php echo $this->l('list_clear_filtering');?>" id='search_clear' class="btn btn-inverse"><i class="icon-remove icon-white"></i> <?php echo $this->l('list_clear_filtering');?></button>
+        </div>
+	</div>
+<?php echo form_close(); ?>
 
-	
+	<div class="mDiv">
 	
 		<div class="ftitle">
 			<?php if(strtolower($subject) != 'record'): echo $subject; else: echo '&nbsp;'; endif; ?>
@@ -60,6 +78,17 @@ if($success_message !== null){?>
             </a>
 			<div class="btnseparator">
 			</div>
+			
+        	<a href='#' title='Search' class='add-anchor' id="quickSearchButtonTop">
+			<div class="fbutton">
+				<div>
+					<span class="magnifier">Click to Search</span>
+				</div>
+			</div>
+            </a>
+			<div class="btnseparator">
+			</div>
+
 		</div>
 		<?php }?>
 		<div class="tDiv3">
@@ -92,30 +121,8 @@ if($success_message !== null){?>
 		<?php echo $list_view?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" autocomplete = "off"'); ?>	
-	<div class="sDiv" id='quickSearchBox'>
-		<div class="sDiv2">
-			<?php echo $this->l('list_search');?>: <input type="text" class="qsbsearch_fieldox" name="search_text" size="30" id='search_text'>
-			<select name="search_field" id="search_field">
-				<option value=""><?php echo $this->l('list_search_all');?></option>
-				<?php foreach($columns as $column){?>
-				<option value="<?php echo $column->field_name?>"><?php echo $column->display_as?>&nbsp;&nbsp;</option>
-				<?php }?>
-			</select>
-            <input type="button" value="<?php echo $this->l('list_search');?>" id='crud_search'> 
-		</div>
-        <div class='search-div-clear-button'>
-        	<input type="button" value="<?php echo $this->l('list_clear_filtering');?>" id='search_clear'>
-        </div>
-	</div>
 	<div class="pDiv">
 		<div class="pDiv2">
-			<div class="pGroup">
-				<div class="pSearch pButton" id='quickSearchButton' title="<?php echo $this->l('list_search');?>">
-					<span></span>
-				</div>
-			</div>
-			<div class="btnseparator">
-			</div>
 			<div class="pGroup">
 				<select name="per_page" id='per_page'>
 					<?php foreach($paging_options as $option){?>

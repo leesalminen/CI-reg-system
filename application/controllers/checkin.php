@@ -77,6 +77,21 @@ ORDER BY student.lastname
 			 	
 
 		$table =  $this->table->generate();
+		
+		$sc = stream_context_create(array( 'http' => array( 'timeout' => '5' ) ) );
+ 		$random = file_get_contents('http://numbersapi.com/' . date('n'). '/' .date('j'),'',$sc);
+ 		
+ 		if($random) {
+ 		
+ 		$output['random'] = $random;
+	 		
+	 		
+ 		} else {
+	 		
+	 		
+	 		$output['random'] = "I'm all out of fun facts...try again later :/ .";
+ 		}
+
 	   			
 	   	$output['table'] = $table;
 		
@@ -90,7 +105,23 @@ ORDER BY student.lastname
  		$this->load->view('checkin_view',$output);
  		$this->load->view('footer'); 	
  		
- 	} else { $output['js_files'] = array();
+ 		} else { 
+ 	
+ 		$sc = stream_context_create(array( 'http' => array( 'timeout' => '5' ) ) );
+ 		$random = file_get_contents('http://numbersapi.com/' . date('n'). '/' .date('j'),'',$sc);
+ 		
+ 		if($random) {
+ 		
+ 		$output['random'] = $random;
+	 		
+	 		
+ 		} else {
+	 		
+	 		
+	 		$output['random'] = "I'm all out of fun facts...try again later :/ .";
+ 		}
+ 		
+ 	    $output['js_files'] = array();
 		$output['css_files'] = array() ;$output['username'] = username();$output['noRows'] = '1'; $this->load->view('header',$output);
  		$this->load->view('checkin_view',$output);
  		$this->load->view('footer');  }	} else { $this->login(); }

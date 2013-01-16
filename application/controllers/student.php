@@ -39,6 +39,9 @@ class Student extends Application {
 
 
        $crud->add_action('Student Transcript Report', '/assets/grocery_crud/themes/flexigrid/css/images/magnifier.png', '','',array($this,'_callback_class_page'));
+       
+              $crud->set_rules('telephone','10 Digit Phone Number (XXXXXXXXXX)','integer');
+
 
    	$output = $crud->render();
    	

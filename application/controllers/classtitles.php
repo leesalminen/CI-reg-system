@@ -7,11 +7,14 @@ class Classtitles extends Application {
 	{
 		parent::__construct();
 		$this->load->library('grocery_CRUD'); 
+		$this->load->library('ag_auth');
+		$this->load->helper('ag_auth');
 		
 	}
 	
 	function index()
 	{
+		if(logged_in()) {
 		 $crud = new grocery_CRUD();
  		$this->load->library('grocery_CRUD'); 
 
@@ -32,6 +35,12 @@ class Classtitles extends Application {
   	$this->load->view('header',$output);
     $this->load->view('coursetitle_view', $output);
 	$this->load->view('footer');
+	 
+	} else {
+		
+		$this->login();
+		
+	}
 	
 	}
 	

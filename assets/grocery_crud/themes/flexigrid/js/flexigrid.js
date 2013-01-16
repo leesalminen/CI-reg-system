@@ -1,6 +1,6 @@
 $(function(){
-	$('#quickSearchButton').click(function(){
-		$('#quickSearchBox').slideToggle('normal');
+	$('#quickSearchButtonTop').click(function(){
+		$('#quickSearchBoxTop').slideToggle('normal');
 	});
 	$('.ptogtitle').click(function(){
 		if($(this).hasClass('vsble'))
@@ -27,7 +27,7 @@ $(function(){
 	
 	call_fancybox();
 	
-	$('#filtering_form').submit(function(){		
+	$('#filtering_form,#filtering_form_top').submit(function(){		
 		var crud_page =  parseInt($('#crud_page').val());
 		var last_page = parseInt($('#last-page-number').html());
 		
@@ -66,13 +66,13 @@ $(function(){
 	
 	$('#crud_search').click(function(){
 		$('#crud_page').val('1');
-		$('#filtering_form').trigger('submit');
+		$('#filtering_form_top').trigger('submit');
 	});
 	
 	$('#search_clear').click(function(){
 		$('#crud_page').val('1');
 		$('#search_text').val('');
-		$('#filtering_form').trigger('submit');
+		$('#filtering_form_top').trigger('submit');
 	});
 	
 	$('#per_page').change(function(){

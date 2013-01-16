@@ -51,9 +51,8 @@ class Classschedule extends Application {
 	 $crud->callback_column('numStudents',array($this,'_get_enrolled_students'));
 
 		
-		$crud->columns('classtitleid','startdate','enddate','type','cancelled','location','type','instructor','numStudents');
+		$crud->columns('classtitleid','startdate','enddate','cancelled','location','type','instructor','numStudents');
 
-   
    	$output = $crud->render();
    	
 

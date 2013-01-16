@@ -158,9 +158,9 @@ table th
 	padding:1px;
 }
 .flexigrid div.sDiv /*toolbar*/ {
-	background:#fafafa url(images/bg.gif) repeat-x top;
+	/*background:#fafafa url(images/bg.gif) repeat-x top;*/
 	position:relative;
-	border:1px solid #ccc;
+	/*border:1px solid #ccc;*/
 	border-top:0px;
 	overflow:hidden;
 	display:none;
@@ -206,6 +206,11 @@ table th
 	background-position: 0px 3px;
 	padding-left: 20px;
 }
+.flexigrid div.fbutton span.magnifier {
+	background:url(images/magnifier.png) no-repeat;
+	background-position: 0px 3px;
+	padding-left: 20px;
+}
 .flexigrid div.fbutton span.export {
 	background:url(images/export.png) no-repeat;
 	background-position: 0px 3px;
@@ -220,6 +225,7 @@ table th
 	background:url(images/close.png) no-repeat;
 	padding-left: 20px;
 }
+span.delete {	background:url(images/close.png) no-repeat; padding-left:20px; padding-bottom:3px;}
 .flexigrid div.fbutton:hover,.flexigrid div.fbutton.fbOver {
 	padding:0px;
 	border:1px solid #ccc;
@@ -633,6 +639,7 @@ div.pGroup {
 {
 	float:right;	
 	padding:5px;
+	margin-top:5px;
 }
 .flexigrid .edit-icon
 {
