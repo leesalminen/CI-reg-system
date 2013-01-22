@@ -38,6 +38,25 @@ class Welcome extends Application {
 		$this->login();
 		}
 	}
+	
+	public function checkLoginStatus() {
+		
+		$diff = time() - $this->session->userdata('last_activity');
+		
+		if($diff > 7040) {
+			
+			echo '0';				
+			
+		} else {
+			
+			echo '1';
+			
+		}
+
+			
+	}
+		
+
 }
 
 /* End of file welcome.php */

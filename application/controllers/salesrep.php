@@ -18,6 +18,7 @@ class Salesrep extends Application {
     $crud->set_table('salesperson');
     $crud->set_subject('Sales Rep');
 
+    $crud->required_fields('name');
 
 	$crud->display_as('name','Sales Rep');
  	

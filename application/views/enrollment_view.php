@@ -1,6 +1,6 @@
     <div id="topspacegc">
-    
-
+    	 <div class="alert alert-info"><b>Helpful Tip:</b> Click the red exclamation point next to any registration to quickly cancel that registration.</div>
+    	
         <?php echo $output; ?>
         <?php if(isset($dropdown_setup)) {
     	$this->load->view('dependent_dropdown', $dropdown_setup);

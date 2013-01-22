@@ -16,7 +16,6 @@
     <!-- End new bootstrap code-->
     
 <script src="<?=base_url()?>assets/grocery_crud/js/jquery-1.8.2.min.js"></script>
-
 <?php 
 if(isset($css_files)) { foreach($css_files as $file): ?>
     <link type="text/css" rel="stylesheet" href="<?php echo $file; ?>" />
@@ -62,16 +61,18 @@ a:hover
 }
 .icon-white, .nav > .active > a > [class^="icon-"], .nav > .active > a > [class*=" icon-"], .dropdown-menu > li > a:hover > [class^="icon-"], .dropdown-menu > li > a:hover > [class*=" icon-"], .dropdown-menu > .active > a > [class^="icon-"], .dropdown-menu > .active > a > [class*=" icon-"] {background-image: url("<?=base_url()?>img/glyphicons-halflings-white.png") !important;}
 </style>
-<script type="text/javascript">
+<script>
  $(document).ready(function() {
-
-	$("#billingid_input_box").append('<div id="addNewBillingID"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>billing/index/add?popup=1\')">New Billing Contact</a></div>'); 
+ 
+ 	window.setInterval(function(){checkLoginStatus()}, 60000);
+	 
+	 	$("#billingid_input_box").append('<div id="addNewBillingID"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>billing/index/add?popup=1\')">New Billing Contact</a></div>'); 
 
 //	$("#classtitleid_input_box").append('<div id="addNewClassTitle"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>classtitles/index/add?popup=1\')">New Class Title</a></div>'); 
 
 $("#studentid_input_box").append('<div id="addNewStudent"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>student/index/add?popup=1\')">New Student</a></div>'); 
 
-$("#instructor_input_box").append('<div id="addNewInstructor"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>instructors/index/add?popup=1\')">New Instructor</a></div>'); 
+// $("#instructor_input_box").append('<div id="addNewInstructor"><a href="#" rel="#" onclick="addStudentPopup(\'<?php echo base_url(); ?>instructors/index/add?popup=1\')">New Instructor</a></div>'); 
 
 $("#field-telephone").attr('pattern','^[1-9]{2}[0-9]{8}$');
 
@@ -84,8 +85,23 @@ function addStudentPopup(url) {
 	window.open(url, "Add Student", "status = 1, height=600, width=800, resizable=0");
 }
 
+function checkLoginStatus() {
+	$.get("/welcome/checkLoginStatus", function(data) {
+		 		if(data === '0') {
+		 		
+		 			if(confirm('Your session has expired due to inactivity. Click OK to login again.')) {
+			 			
+			 			location.reload(true);
+		 			}
+		 			
+		 			
+			 		
+		 		}
+	 	});
+}
 
 </script>
+<noscript><div class="alert alert-error"><h1>This application requires JavaScript to run properly. Please enable JavaScript in your browser.</h1></div></noscript>
 </head>
 <body>
 
@@ -121,7 +137,7 @@ function addStudentPopup(url) {
                 
                 <ul id="secondary-nav" class="visible-desktop nav pull-right">
                     <li><a style="color:#3fa0ee;" data-toggle="modal" href="#myModal"><i class="icon-user icon-white"></i>&nbsp;Hello, <strong><?php if(isset($username)) { echo $username; } ?></strong></a></li>
-                    <li class="dropdown"><a style="color:#3fa0ee;" href="/admin/users/manage" data-toggle="dropdown"><i class="icon-cog icon-white">
+                    <li class="dropdown"><a style="color:#3fa0ee;" href="/admin" data-toggle="dropdown"><i class="icon-cog icon-white">
                     </i><span>Settings</span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#"><i class="icon-wrench"></i>&nbsp;Site Config</a></li>

@@ -23,6 +23,8 @@ class Classtitles extends Application {
    // $crud->set_theme('datatables');
     $crud->set_subject('Course Title');
     
+    $crud->required_fields('classname','tuition','courseware','length','url');
+    
     //LEEE
     
   //  $crud->unset_add();

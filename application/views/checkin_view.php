@@ -349,21 +349,14 @@ $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
        <!--<p>This form does not show enrollments with statuses "Cancelled" or "No Show" already marked.</p>-->
        
        
-      <?php if(!isset($noRows)) { echo $table; } else { echo '
+      <?php if(!isset($noRows)) { echo $table. '<div class="row" style="margin-top:25px;"><div class="span12"><p><b>Fun Fact:</b> ' .$random. '</p></div></div>'; } else { echo '
      
       <div class="alert alert-info">No active registrations for today ... Go Home Early :)</div>
       <div class="well"><h4>Since there\'s nothing to do, here\'s a fun fact for you!</h4><p>' .$random. '</p></div>'; } ?>
        
     </div>
     
-    <div class="row" style="margin-top:25px;">
-    <div class="span12">
-    <p><b>Fun Fact:</b> 
-    <?php echo $random; ?>
-    </p>
-    </div>
-    </div>
-    
+       
     </div>
 
  

@@ -17,7 +17,7 @@ class Classschedule extends Application {
 	if(logged_in()) {
 		 $crud = new grocery_CRUD();
 		 
-		 
+    $crud->where('startdate >=',date('Y-m-d 00:00:00'));
    // $crud->set_theme('datatables');
     $crud->set_table('class_schedule');
    // $crud->set_theme('datatables');
@@ -36,7 +36,8 @@ class Classschedule extends Application {
  	   $crud->display_as('laptops','Laptops Needed?');
  	   $crud->display_as('cancelled','Class Cancelled?');
  	   $crud->display_as('duration','Duration (in Hours)');
- 	   $crud->display_as('numStudents','Total/CXL');
+ 	   $crud->display_as('numStudents','Active/CXL');
+		    $crud->callback_before_delete(array($this,'checkEnrollmentsBeforeDelete'));
 
  	   
  	   $crud->unset_add_fields('cancelled');
@@ -63,6 +64,25 @@ class Classschedule extends Application {
  	} else { $this->login();}
 	}
 	
+	public function checkEnrollmentsBeforeDelete($primary_key) {
+		
+		$this->load->database();
+		
+		$sql = "SELECT id FROM enrollment WHERE datesid = '" .$primary_key. "'";
+		$query = $this->db->query($sql);
+		
+		if($query->num_rows() > 0) {
+			
+			return false;
+			
+		} else {
+		
+			return true;
+		}
+		
+	}
+
+
 	
 	public function _callback_class_page($value, $row) {
 	
@@ -81,13 +101,13 @@ class Classschedule extends Application {
 	function _get_enrolled_students($value,$row) {
 		$this->load->database();
 	
-	$sql = "SELECT id FROM enrollment where datesid = \"" .$row->id. "\"";
+	$sql = "SELECT id FROM enrollment where datesid = \"" .$row->id. "\" AND userCancel = '0' AND noshow = '0'";
 	$query = $this->db->query($sql);
 	
 	$sql2 = "SELECT id FROM enrollment where datesid = \"" .$row->id. "\" AND userCancel = '1'";
 	$query2 = $this->db->query($sql2);
 	
-	return '<span class="totalStudents">' .$query->num_rows(). ' / ' .$query2->num_rows(). '</span>';		
+	return '<span class="totalStudents"><b>' .$query->num_rows(). '</b> / ' .$query2->num_rows(). '</span>';		
 	}
 	
 	public function classroster() {
@@ -134,10 +154,29 @@ $grossCourseware = array();
 	   if($row->userCancel == '1') { $cancelled = 'Yes';} else { $cancelled = 'No'; }
 	   if($row->noshow == '1') { $noShow = 'Yes';} else { $noShow = 'No'; }
 	   $totalCost = money_format('$%i',$row->tuition);
-	   $grossCost[] = $row->tuition; 
-	   $grossCourseware[] = $row->courseware;
+	   
+	   if($row->userCancel != '1' && $row->noshow != '1') {
+	  	 $grossCost[] = $row->tuition; 
+	  	 $grossCourseware[] = $row->courseware;
+	  	  	 
+	  	}
+
+	  	
+	  	
+	  	if($row->userCancel == '1' || $row->noshow == '1') {
+	  		
+	  		$cxlTxt = '<p style="text-align:center;margin:0;padding:0;">Enrollment CXL or NoShow</p>';
+
+	  	} else {
+		  	
+		  	$cxlTxt = '<p style="text-align:center;margin:0;padding:0;"><a href="#" id="' .$row->id. '" onclick="cancelEnrollment(' .$row->id. ');return false;">Cancel Enrollment</a></p>';		  	
+	  	}
+	  	
+	  	
+	   
+	   
 	      			$fullname = $row->firstname. ' ' .$row->lastname;
-	      			$this->table->add_row(array('<p style="text-align:center;margin:0;padding:0;"><a href="#" id="' .$row->id. '" onclick="cancelEnrollment(' .$row->id. ');return false;">Cancel Enrollment</a></p>',$fullname, $row->email,  $row->companyname, $row->billingcontact,$checkedIn, $cancelled, $noShow, $totalCost));
+	      			$this->table->add_row(array($cxlTxt,$fullname, $row->email,  $row->companyname, $row->billingcontact,$checkedIn, $cancelled, $noShow, $totalCost));
 	      		$output['url'] = $row->url;
 	      		$output['classname'] = $row->classname;
 	      		$output['length'] = $row->duration. ' Hours';

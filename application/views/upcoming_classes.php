@@ -42,7 +42,8 @@ $(document).ready(function(){
    	    <input type="text" id="datepickerTo" class="datepicker" name="datepickerTo" placeholder="Choose To Date" value="" /> (optional, if blank will show indefinitely into the future)
 		
 		<br /><br />
-		
+		<input type="checkbox" id="checkBox" name="checkBox" value="0" /> Show Only Courses With Enrollments? 
+		<br /><br />
    		<button type="submit" id="submit" class="btn btn-primary">Generate Form</button>
    		
     </form>

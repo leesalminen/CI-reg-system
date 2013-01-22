@@ -258,7 +258,7 @@ ORDER BY lastname
 		$this->load->library('table');
 
 	
-	$sql = "SELECT invoices.id as invoiceid, company.companyname, billing.billingcontact,invoices.status FROM invoices LEFT JOIN billing as billing on billing.id = invoices.billingID LEFT JOIN company as company on company.id = billing.companyid WHERE status != \"Paid\" AND createdAt >= \"" .strtotime ( '-30 days' , strtotime ( date('Y-m-d H:i:s'))). "\" ORDER BY companyname, status";
+	$sql = "SELECT invoices.id as invoiceid, invoices.createdAt, company.companyname, billing.billingcontact,invoices.status FROM invoices LEFT JOIN billing as billing on billing.id = invoices.billingID LEFT JOIN company as company on company.id = billing.companyid WHERE status != \"Paid\" AND createdAt >= \"" .strtotime ( '-30 days' , strtotime ( date('Y-m-d H:i:s'))). "\" ORDER BY companyname, status";
 	
 	
 		$query = $this->db->query($sql);
@@ -269,7 +269,7 @@ ORDER BY lastname
 	
 	
 		
-		$this->table->set_heading('Invoice ID','Company Name','Billing Contact','Status','Send via Email','View/Print','Mark as Sent','Delete');	
+		$this->table->set_heading('Invoice ID','Created On','Company Name','Billing Contact','Status','Send via Email','View/Print','Mark as Sent','Delete');	
 	
 		$array = array();
 			foreach($query->result() as $row){
@@ -284,8 +284,12 @@ ORDER BY lastname
 		} else {
 			$markAsSent = '<p style="text-align:center;margin:0;padding:0;color:#666;">Mark As Sent</p>';	
 		}
-					    
-		    $this->table->add_row($row->invoiceid,$row->companyname, $row->billingcontact, $row->status,'<p style="text-align:center;margin:0;padding:0;"><a href="#" onclick="emailInvoice(' .$row->invoiceid. ')">Email Invoice</a></p>','<p style="text-align:center;margin:0;padding:0;"><a href="/invoice/printInvoice/' .$row->invoiceid. '">View/Print Invoice</a></p>',$markAsSent,'<p style="text-align:center;margin:0;padding:0;"><a href="#" onclick="deleteInvoice(' .$row->invoiceid. ');">Delete Invoice</a></p>');
+		
+		$createdAt2 = explode('-',$row->createdAt);
+		$createdAt3 = explode(' ',$createdAt2[2]);
+		$createdAt = $createdAt2[1]. '/' .$createdAt3[0]. '/' .$createdAt2[0];
+   
+		    $this->table->add_row($row->invoiceid,$createdAt,$row->companyname, $row->billingcontact, $row->status,'<p style="text-align:center;margin:0;padding:0;"><a href="#" onclick="emailInvoice(' .$row->invoiceid. ')">Email Invoice</a></p>','<p style="text-align:center;margin:0;padding:0;"><a href="/invoice/printInvoice/' .$row->invoiceid. '">View/Print Invoice</a></p>',$markAsSent,'<p style="text-align:center;margin:0;padding:0;"><a href="#" onclick="deleteInvoice(' .$row->invoiceid. ');">Delete Invoice</a></p>');
 		    
 		}
 		
@@ -334,11 +338,12 @@ ORDER BY lastname
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
+			$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,company.companyname FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 	LEFT JOIN billing as billing on billing.id = enrollment.billingid
+	LEFT JOIN company as company on company.id = enrollment.companyid
 	WHERE enrollment.id = \"" .$enrollmentID. "\"
 	";
 	
@@ -372,13 +377,13 @@ ORDER BY lastname
 	
 	if($row->attentionto != '' ) {
 	
-		$attentionTo = '<br />Attention To: ' .$row->attentionto;
+		$attentionTo = 'Attention To: ' .$row->attentionto;
 	} else {
 		$attentionTo = '';
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+	$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong><br />' .$array[0]->companyname. '<br />' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
@@ -463,11 +468,12 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-	$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
+	$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,company.companyname FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 	LEFT JOIN billing as billing on billing.id = enrollment.billingid
+	LEFT JOIN company as company on company.id = enrollment.companyid
 	WHERE enrollment.id = \"" .$enrollmentID. "\"
 	";	
 	
@@ -500,13 +506,13 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 	
 	if($row->attentionto != '' ) {
 	
-		$attentionTo = '<br />Attention To: ' .$row->attentionto;
+		$attentionTo = 'Attention To: ' .$row->attentionto;
 	} else {
 		$attentionTo = '';
 	
 	}
 			
-$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong><br />' .$array[0]->companyname. '<br />' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
@@ -621,11 +627,12 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-			$sql = "SELECT student.firstname, student.lastname,billing.billingemail, class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,enrollment.id as enrollmentid FROM enrollment
+			$sql = "SELECT student.firstname, student.lastname,billing.billingemail, class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate,billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,enrollment.id,company.companyname as enrollmentid FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 	LEFT JOIN billing as billing on billing.id = enrollment.billingid
+	LEFT JOIN company as company on company.id = enrollment.companyid
 	WHERE enrollment.id = \"" .$enrollmentID. "\"
 	";
 	
@@ -657,13 +664,13 @@ $pdf->Output('/home/campus/public_html/tmp/invoice/invoice' .$invoiceID. '.pdf',
 	
 	if($row->attentionto != '' ) {
 	
-		$attentionTo = '<br />Attention To: ' .$row->attentionto;
+		$attentionTo = 'Attention To: ' .$row->attentionto;
 	} else {
 		$attentionTo = '';
 	
 	}
 			
-$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+$table = '<h1 align="right">INVOICE</h1><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong><br />' .$array[0]->companyname. '<br />' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   
@@ -795,11 +802,12 @@ if($this->email->send()) {
 		$costArray = array();
 		foreach($enrollmentIDs as $enrollmentID) {
 		
-				$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate, billing.billingemail, billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po FROM enrollment
+				$sql = "SELECT student.firstname,student.lastname,class_titles.classname,enrollment.tuition,enrollment.courseware,class_schedule.startdate, billing.billingemail, billing.id as billingid,billing.attentionto,billing.billingcontact,billing.billingaddress,billing.billingaddress2,billing.billingcity,billing.billingstate,billing.billingzip,enrollment.po,company.companyname FROM enrollment
 	LEFT JOIN student as student on student.id = enrollment.studentid
 	LEFT JOIN class_titles as class_titles on class_titles.id = enrollment.classid
 	LEFT JOIN class_schedule as class_schedule on class_schedule.id = enrollment.datesid
 	LEFT JOIN billing as billing on billing.id = enrollment.billingid
+	LEFT JOIN company as company on company.id = enrollment.companyid
 	WHERE enrollment.id = \"" .$enrollmentID. "\"
 	";
 	
@@ -831,13 +839,13 @@ if($this->email->send()) {
 	
 	if($row->attentionto != '' ) {
 	
-		$attentionTo = '<br />Attention To: ' .$row->attentionto;
+		$attentionTo = 'Attention To: ' .$row->attentionto;
 	} else {
 		$attentionTo = '';
 	
 	}
 			
-	$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong>' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
+	$table = '<h1 align="right">INVOICE</h1><h2 align="right" style="color:red;">PAID</h2><table><tr><td><p><strong>Campus Linc</strong><br />25 John Glenn Drive<br />Suite 102<br />Amherst, NY 14228<br />716.688.8688<br /></p><p><strong>Bill To:</strong><br />' .$array[0]->companyname. '<br />' .$attentionTo. '<br />' .$array[0]->billingcontact. '<br />' .$address. '<br />' .$array[0]->billingcity. ', ' .$array[0]->billingstate. ' ' .$array[0]->billingzip. '</p></td><td align="right"><p>Invoice #: ' .$invoiceID. '<br />Date Created On: ' .$createdAt. '</p></td></tr><tr height="20"><td>&nbsp;</td></tr></table><table><thead><tr><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Full Name</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;" >Service Offered</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Total Cost</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">Start Date</th><th style="font-size:22px;font-weight:normal;color:#039;border-bottom:2px solid #6678b1;padding:10px 8px;">PO</th></tr></thead><tbody><tr height="2"><td>&nbsp;</td></tr>';
 	
 	    $count = count($array);
 	   

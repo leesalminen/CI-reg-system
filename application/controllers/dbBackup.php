@@ -46,6 +46,16 @@ class dbBackup extends Application {
 		write_file($fileName, $backup); 
 		
 		log_message('error', 'dB Backup Performed by ' . username() . ' on ' . date('m-d-Y H:i:s') . '.');
+		$this->load->library('email');
+		
+		$this->email->from('shaune@campuslinc.com', 'Shaune Dwyer');
+		$this->email->to('shaune@campuslinc.com'); 
+		$this->email->bcc('leesalminen@gmail.com'); 
+		
+		$this->email->subject('DB Backup Performed');
+		$this->email->message('A DB Backup was performed by ' . username() . ' on ' . date('m-d-Y H:i:s') . '.');	
+
+		$this->email->send();
 		
 		$this->load->helper('download');
 		force_download('/dbBackup' . date('Y-m-d-H-i-s') . '.zip', $backup);

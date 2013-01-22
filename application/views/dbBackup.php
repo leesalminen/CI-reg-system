@@ -1,26 +1,3 @@
-<script>
-$(document).ready(function() {  
-	/*$("#backupDB").submit(function() { 
-	var form = $(this);
-	var post_url = '/dbBackup/doBackup';
-	var post_data = '';	
-			$.ajax({
-				type:'POST',
-				url: post_url,
-				data: post_data,
-				dataType: "json",
-				success: function(msg) {
-						$("#response").html(msg);
-				}
-			});
-		return false;
-		});*/
-		
-});
-
-</script>
-
-
 <div class="row">
 <div class="span12">
 <h1>Database Backup</h1>
@@ -28,9 +5,9 @@ $(document).ready(function() {
 
 
 <a href="/dbBackup/doBackup"><button class="btn btn-primary" id="backupDB">Click Here To Backup Database</button></a>  
-
-
-<div id="response"></div>
-      
 </div>
+</div>
+
+<div class="alert alert-info" style="margin-top:25px;"><b>Helpful Tip:</b> If this script times out (doesn't download after a full 60 seconds), then your database is too large to backup through the web interface. <a href="mailto:support@zoodlemarketing.com">Contact Zoodle</a> for a manual backup.</div>
+
 </div>

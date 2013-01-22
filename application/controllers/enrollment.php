@@ -15,7 +15,8 @@ class Enrollment extends Application {
 	{
 	if(logged_in()) {
 		 $crud = new grocery_CRUD();
- 
+		     $crud->where('startdate >=',date('Y-m-d 00:00:00'));
+
   	$crud->unset_add_fields(array('status','cancelNotes','checkedIn','userCancel','noshow','invoiceID','reminderEmailSent','enrollmentTimestamp','enrollmentUser'));
   	$crud->unset_columns(array('status','cancelNotes','invoiceStatus','emailStudent','reminderEmailSent','po','checkedIn','noshow','courseware','regType'));
   	$crud->unset_edit_fields('status','reminderEmailSent','companyid','billingid','classid','datesid','enrollmentTimestamp','enrollmentUser');
@@ -56,11 +57,12 @@ class Enrollment extends Application {
 
 	  $crud->required_fields(array('companyid','studentid','billingid','classid','datesid','tuition','courseware'));
 
-   
+    $crud->add_action('Cancel Enrollment', '/assets/grocery_crud/themes/flexigrid/css/images/error.png', '/enrollment/cancelEnrollment',array($this,'cancelEnrollment'));
+    
     //$crud->display_as('classname','Course Title', ");
 
 	 $crud->callback_after_insert(array($this, 'emailUserOnRegister'));
-
+	 
 
    
   	 $output = $crud->render();
@@ -96,6 +98,24 @@ class Enrollment extends Application {
 	} else { $this->login(); }
 	
 	}
+	
+	public function cancelEnrollment() {
+	
+		$id = $this->uri->segment(3);
+		$this->load->database();
+				
+		$sql = 'UPDATE enrollment SET checkedIn = "0", noshow = "0", userCancel = "1" WHERE id = "' .$id. '" LIMIT 1';
+		
+		if($this->db->query($sql)) {
+		
+		$this->load->helper('url');
+			
+			redirect('/enrollment', 'refresh');
+		
+		} else { return false;	 }
+	
+	}
+
 	
 	//get dependent student dropdown
 	function getStudent() {
@@ -146,7 +166,7 @@ class Enrollment extends Application {
 		$this->db->select("*")
 				 ->from('class_schedule')
 				 ->where('classtitleid', $classtitleid)
-				 ->where('startdate >=' , date('Y-m-d'))
+				 ->where('startdate >=' , strtotime ( '-30 days' , strtotime ( date('Y-m-d 00:00:00'))))
 				 ->order_by("startdate","asc");
 		$db = $this->db->get();
 		
@@ -154,7 +174,7 @@ class Enrollment extends Application {
 		foreach($db->result() as $row):
 			$array[] = array("value" => $row->id, "property" => date("m-d-Y",strtotime($row->startdate)));
 		endforeach;
-		
+		 
 		echo json_encode($array);
 		exit;     
 	
