@@ -403,8 +403,9 @@ border-color: #339933;
 #login input[type=submit] {
    display: inline-block;
    font-size: 14px;
-   width: 200px;
-   margin-left: 50px;
+   width:240px;
+  /* width: 200px;
+   margin-left: 50px; */
 	outline: none;
 	cursor: pointer;
 	text-align: center;
